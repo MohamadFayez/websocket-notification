@@ -1,0 +1,27 @@
+
+spring:
+  application:
+    name: websocket-notification
+  mvc:
+    throw-exception-if-no-handler-found: true
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+server:
+  port: 7084
+  static:
+      path:
+        welcome: index.html
+
+encryption:
+  aesAlgorithm: AES
+app:
+  config:
+    integration:
+      common:
+        health-base-url: /mgmt/health
+        error-code-path: file:///home/java/config/error-codes.json
+        generated-jwt-from-basic-expiry: 1200000
+        kafka-log:
+          topic: integration_dev_api_tracing
+          bootstrap-servers: vsrsitcnfkf01.dev.mdi:9092,vsrsitcnfkf02.dev.mdi:9092,vsrsitcnfkf03.dev.mdi:9092

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Websocket Notification</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/sockjs.min.js"></script>
+    <script src="/js/stomp.min.js"></script>
+    <script src="/js/scripts.js"></script>
+</head>
+<body>
+<div class="container" style="margin-top: 50px">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-inline">
+                <div class="form-group">
+                    <input class="form-control" id='ts' placeholder="Timestamp" type='text'/>
+                    <input class="form-control" id='key' placeholder="Public key" type='text'/>
+                    <input class="form-control" id='deviceId' placeholder="Device Id" type='text'/>
+                    <input class="form-control" id='authorization' placeholder="Authorization" type='text'/>
+                </div>
+                <button class="btn btn-default" id="connect" type="button">Connect</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-inline">
+                <div class="form-group">
+                    <input class="form-control" id="message" placeholder="Enter your message here..." type="text">
+                </div>
+                <button class="btn btn-default" id="send" type="button">Send Global Message</button>
+            </form>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px">
+        <div class="col-md-12">
+            <form class="form-inline">
+                <div class="form-group">
+                    <input class="form-control" id="private-message" placeholder="Private Message here..." type="text">
+                    <input class="form-control" id="receiver-id" placeholder="Receiver DeviceId here..." type="text">
+                </div>
+                <button class="btn btn-default" id="send-private" type="button">Send Private Message</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped" id="message-history">
+                <thead>
+                <tr>
+                    <th>Messages
+                        <span
+                                id="notifications"
+                                style="
+                                    color: white;
+                                    background-color: white;
+                                    padding-left: 15px;
+                                    padding-right: 15px;">
+                            </span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody id="messages">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

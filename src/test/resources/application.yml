@@ -1,0 +1,2510 @@
+spring:
+  application:
+    name: domain-archetype
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+server:
+  port: 7180
+
+app:
+  config:
+    integration:
+      mgw:
+        ecards-verification-microgateway:
+          application-version: '@project.version@'
+          host: http://e-cards-microgateway.dev.apps.openshift.dev.mdi
+          base-uri: /mgw
+          api:
+            get-ecards-token-uri: /v1/ecards/token
+            start-sdk-session-uri: /api/v1/sdk-session/start/
+            start-bundle-sdk-session-uri: /api/v1/bundle/start-session/
+            perform-ocr-sdk-uri: /api/v1.4/ocr/
+            combine-ocr-sdk-uri: /api/v1/transaction/combine-ocr/
+            liveness-detection-sdk-uri: /api/v1/liveness/register/
+            face-match-sdk-uri: /api/v1/face/match/
+            start-watermark-sdk-uri: /api/v1.2/watermark/start/
+            predict-watermark-sdk-uri: /api/v1.2/watermark/predict/
+            transliterate-uri: /api/v1/transliterate/
+
+          backend:
+            host: https://ekycsandbox.ecards.com.eg
+            api:
+              token-uri: /api/o/token/
+              ocr-uri: /api/v1/ocr/
+              face-match-uri: /api/v1/face/match/
+              transliterate-uri: /api/v1/transliterate/
+              start-sdk-session-uri: /api/v1/sdk-session/start/
+              start-bundle-sdk-session-uri: /api/v1/bundle/start-session/
+              perform-ocr-sdk-uri: /api/v1.4/ocr/
+              combine-ocr-sdk-uri: /api/v1/transaction/combine-ocr/
+              liveness-detection-sdk-uri: /api/v1/liveness/register/
+              face-match-sdk-uri: /api/v1/face/match/
+              start-watermark-sdk-uri: /api/v1.2/watermark/start/
+              predict-watermark-sdk-uri: /api/v1.2/watermark/predict/
+
+        site-core-microgateway:
+          application-version: '@project.version@'
+          host: http://site-core-microgateway.dev.apps.openshift.dev.mdi
+          base-uri: /mgw
+          api:
+            load-config-uri: /api/v1/contents/config/load
+            load-tc-uri: /api/v1/contents/tc/load
+          backend:
+            host: https://cm.sitecore.dev.mdi
+            api:
+              get-tc-uri: /sitecore/api/ssc/item/
+              get-config-uri: /api/v1/contents/config/load
+              login: /sitecore/api/ssc/auth/login
+          config:
+            terms-types: '{
+                         REGISTRATION_TC: "4BCDD100-4EB6-415E-8E9A-31DE063996BE",
+                         DATA_SECRECY_TC: "354BBE26-8DC7-41CE-BBEA-C1A356BF295C",
+                         REQUEST_PHYSICAL_CARD_TC: "C3D6AB96-E8E6-4C72-93FE-C587BF903F4B",
+                         REQUEST_ONLINE_CARD_TC: "B386DC3C-74C2-404D-B6AF-EFE88FAEB05D",
+                         ADDITIONAL_ACCOUNT_TC: "92EE8BBA-F48E-4F09-994D-761B8CD51B06",
+                         ALIAS_CREATING_TC: "B3A9DB3B-523D-49DE-82C6-AA744F4B5D16",
+                         ALIAS_UPDATING_TC: "C6F4B10E-6305-428C-96B6-7CB0A913D4B0",
+                         TRANSFER_TC: "37748813-4A79-40FF-86A2-8EC66D21F5A3",
+                         ADD_FUNDS_FROM_OTHER_CARD_TC: "7CD98BB9-5B99-4B73-B8FF-F7BA58A93035",
+                         TRANSFER_ENTER_CARD_CVV_TC: "9ED911DC-7BDF-41C7-9A27-A97BB519CD12",
+                         REPLACE_CARD_TC: "406AD887-EF03-4963-917E-A5E3F4E9759D",
+                         STAMPED_STATEMENT_TC: "388086CC-7907-4BA4-81AE-C4686C6176EC",
+                         GUEST_MARKETPLACE_TC: "221C0C11-4778-40A2-A53E-20967C93A2B5"
+                       }'
+            hotline: >
+              01200000000,
+              01000000000,
+              01100000000
+            image-base-url: /-/media/MobileApp/Images/
+            document-base-url: /-/media/MobileApp/Docs/
+            us-template-host: https://www.irs.gov/pub/irs-pdf/
+            w8-templateName: fw8bene.pdf
+            w9-templateName: fw9.pdf
+            cms-host: https://cm.sitecore.dev.mdi
+            card-actions:
+              allow-open-physical-card:
+                cardProductId: >
+                  1000,1001,1002
+                cardProductStatus: >
+                  10
+              allow-replace-physical-card:
+                cardProductId: >
+                  1000,1001,1002
+                cardProductStatus: >
+                  10,00,04,05,09
+              allow-close-physical-card:
+                cardProductId: >
+                  1000,1001,1002
+                cardProductStatus: >
+                  00,01,20,21,22,23,24,30
+              allow-activate-physical-card:
+                cardProductId: >
+                  1000,1001,1002
+                cardProductStatus: >
+                  30
+              allow-open-online-card:
+                cardProductId: >
+                  3000,3001,3002
+                cardProductStatus: >
+                  03,06,07
+              allow-close-online-card:
+                cardProductId: >
+                  3000,3001,3002
+                cardProductStatus: >
+                  00,01,02,10,20,21,22,23,24,30
+              allow-card-pin-settings:
+                cardProductId: >
+                  1000,1001,1002
+                cardProductStatus: >
+                  00,01
+              allow-report-an-issue:
+                cardProductId: >
+                  1000,1001,1002,3000,3001,3002
+                cardProductStatus: >
+                  00,01,02,03,04,05,06,07,08,09,10,20,21,22,23,24,30,50,51
+              allow-enable-ecommerce:
+                cardProductId: >
+                  1000,1001,1002,3000,3001,3002
+                cardProductStatus: >
+                  00,01,02,10,20,21,22,23,24,30
+              view-online-card:
+                cardProductId: >
+                  3000,3001,3002
+                cardProductStatus: >
+                  00,01,02,04,05,08,09,10,50,51
+              view-debit-digital-card:
+                cardProductId: >
+                  1000,1001,1002
+                cardProductStatus: >
+                  10
+              view-debit-physical-card:
+                cardProductId: >
+                  1000,1001,1002
+                cardProductStatus: >
+                  00,01,02,04,05,08,09,20,21,22,23,24,30,50,51
+        communication-manager-microgateway:
+          application-version: '@project.version@'
+          host: http://communication-manager.dev.apps.openshift.dev.mdi
+          #host: http://localhost:7088
+          base-uri: /mgw
+          api:
+            base-sms-notification-url: /v1/communication-manager/notifications/sms
+            send-push-notification-by-push-id-uri: /v1/communication-manager/notifications/push
+            send-instant-push-notification-by-push-id-url: /v1/communication-manager/notifications/instant/push
+            send-push-notification-by-push-using-templateid-id-url: /v1/communication-manager/notifications/push/campaign
+            push-notification-with-customer-id-url: /v1/communication-manager/notifications/customer/push
+            base-instant-sms-url: /v1/communication-manager/notifications/instant/sms
+            send-customer-email-url: /v1/communication-manager/notifications/internal/email
+            send-non-customer-email-url: /v1/communication-manager/notifications/external/email
+            register-device-url: /v1/communication-manager/devices/register
+            unregister-device-url: /v1/communication-manager/devices/unregister
+            insert-subscriber: /v1/communication-manager/subscriber
+            mark-push-notification-as-read-uri: /v1/communication-manager/notifications/push/read
+            mark-push-notification-as-received-uri: /v1/communication-manager/notifications/push/receive
+            mark-push-notification-as-hidden-uri: /v1/communication-manager/notifications/push/hide
+            opt-push-topic-uri: /v1/communication-manager/notifications/push/topic/opt
+            list-customer-push-notifications-uri: /v1/communication-manager/notifications
+            list-customer-push-notifications-with-paging-uri: /v1/communication-manager/notifications/paging
+            search-customer-push-notifications-uri: /v1/communication-manager/notifications/search
+            read-all-notifications-by-customer-uri: /v1/communication-manager/notifications/readall
+            unread-customer-push-notifications-count-uri: /v1/communication-manager/notifications/unreadcount
+            update-subscriber: /v1/communication-manager/subscriber/column
+            send-instant-bulk-sms-uri: /v1/communication-manager/notifications/bulk/sms
+            send-different-instant-bulk-sms-uri: /v1/communication-manager/notifications/different/bulk/sms
+            delete-subscriber: /v1/communication-manager/subscriber/delete
+            get-subscriber-by-customer-id: /v1/communication-manager/subscriber
+            transform: /transform
+            send: /send
+          velocity-templates-path:
+            send-sms: send-customer-sms-request-template.vm
+            send-push-notification: send-push-notification-to-disconnected-user-request-template.vm
+            send-instant-push-by-device-id-notification: send-instant-push-notification-by-device-id.vm
+            send-instant-sms: send-instant-sms-request-template.vm
+            send-customer-email: send-customer-email-request-template.vm
+            send-customer-instant-email: send-customer-instant-email-request-template.vm
+            send-non-customer-email: send-non-customer-email-request-template.vm
+            send-non-customer-instant-email: send-non-customer-instant-email-request-template.vm
+            register-device: register-device-request-template.vm
+            unregister-device: unregister-device-request-template.vm
+            send-push-notification-with-customer-number: send-push-notification-with-customer-number-template.vm
+            insert-subscriber: insert-subscriber-template.vm
+            delete-subscriber: delete-subscriber-template.vm
+            mark-send-push-notification-as-read: mark-push-notification-as-read.vm
+            mark-send-push-notification-as-received: mark-push-notification-as-received.vm
+            mark-send-push-notification-as-hidden: mark-push-notification-as-hidden.vm
+            opt-push-topic: opt-push-topic.vm
+            list-customer-push-notifications: list-customer-push-notifications.vm
+            list-customer-push-notifications-with-paging: list-customer-push-notifications-with-paging.vm
+            search-customer-push-notifications: search-customer-push-notifications.vm
+            read-all-notifications-by-customer: read-all-customer-push-notifications-by-customer.vm
+            unread-notifications-count-by-customer: unread-notifications-count-by-customer.vm
+            update-subscriber: update-subscriber-template.vm
+            send-instant-bulk-sms: send-instant-bulk-sms-request.vm
+            send-different-instant-bulk-sms: send-different-instant-bulk-sms.vm
+            send-push-notification-using-template-by-push-Id: sendCampaignPush.vm
+            get-subscriber-by-customer-id: get-subscriber-by-customer-id.vm
+          backend:
+            host: http://10.10.90.114/DPNS
+            api:
+              email-uri: /Email.asmx
+              push-uri: /Push.asmx
+              reports-uri: /Reports.asmx
+              sms-uri: /Sms.asmx
+          instant-sms:
+            sms-server-id: 2
+          config:
+            kafka:
+              bootstrap-address: "vsrsitcnfkf01.dev.mdi:9092,vsrsitcnfkf02.dev.mdi:9092,vsrsitcnfkf03.dev.mdi:9092"
+              topic: "Integration_dev_cortex_notification"
+              group: "myGroup"
+              sleep-time: 1000
+              number-of-trials: 3
+
+
+
+        content-microgateway-service:
+          host:
+          base-uri: /api/v1.0.0/example
+          api:
+
+        crm-microgateway:
+          application-version: '@project.version@'
+          host: http://crm-microgateway.dev.apps.openshift.dev.mdi
+          #host: http://localhost:8080
+          base-uri: /mgw
+          api:
+            last-login-date-uri: /v1/crm/customers/{customerId}/login/last-date
+            load-customer-summary-uri: /v1/crm/customers/customer/summary
+            add-login-history: /v1/crm/customers/customer/login/history
+            retrieve-login-history-uri: /v1/crm/customers/customer/login/history
+            customer-creation-uri: /v1/crm/customers
+            update-customer-status-uri: /v1/crm/customers/customer/status
+            add-document-uri: /v1/crm/customers/customer/document
+            retrieve-customer-by-mobile-number-with-path-variable: /v1/crm/customers/mobile-number/{mobileNumber}
+            retrieve-customer-by-mobile-number-with-path-variable-without-path-variable: /v1/crm/customers/mobile-number/
+            retrieve-customer-by-national-id-with-path-variable: /v1/crm/customers/national-id/{nationalId}
+            retrieve-customer-by-vpan-with-path-variable: /v1/crm/customers/vpan/{vpan}
+            retrieve-customer-by-account-number-with-path-variable: /v1/crm/customers/account-number/{accountNumber}
+            retrieve-customer-by-national-id-without-path-variable: /v1/crm/customers/national-id/
+            retrieve-customer-by-account-number-without-path-variable: /v1/crm/customers/account-number/
+            retrieve-customer-by-vpan-without-path-variable: /v1/crm/customers/vpan/
+            retrieve-customer-by-account-number-with-path-variable-without-path-variable: /v1/crm/customers/account-number/
+            retrieve-customer-by-mobile-number-without-path-variable: /v1/crm/customers/mobile-number
+            retrieve-customer-by-client-id-with-path-variable: /v1/crm/customers/client-id
+            retrieve-customer-by-request-body-customer-id: /v1/crm/customers/customer/retreive
+            mobile-number-existence-validation-uri-variable: /v1/crm/customers/existance/mobile-number/{mobileNumber}
+            mobile-number-existence-validation-uri-without-path-variable-to-validate: /v1/crm/customers/existance/mobile-number
+            update-user-status-on-crm-uri-with-path-variable: /v1/crm/customers/customer/mobile-number
+            disconnect-mobile-number: /v1/crm/customers/mobile-number/disconnect
+            disconnect-additional-mobile-number: /v1/crm/customers/mobile-number/additional/disconnect
+            onboarded: /v1/crm/customers/onboarded
+            onboarded-with-the-same-national-id: /v1/crm/customers/not-onboarded
+            onboarded-with-the-same-national-id-invalid-uri: /v1/crm/customers/not-onboarded/national-id
+            exist-with-the-same-national-id: /v1/crm/customers/not-existance/national-id/{nationalId}
+            exist-with-the-same-national-id-invalid-uri: /v1/crm/customers/not-existance/national-id
+            update-customer-with-customer-id-path-variable: /v1/crm/customers/customer/profile
+            accept-terms-and-conditions: /v1/crm/customers/terms-and-conditions/accept
+            onboarded-with-the-same-customer-id: /v1/crm/customers/not-onboarded/check
+            retrieve-profession-list-uri: /v1/crm/customers/professions
+            set-preferred-language: /v1/crm/customers/customer/preferred-langage
+            retrieve-customer-by-customer-id: /v1/crm/customers/customer
+            communication-address: /v1/crm/customers/communication-address
+            load-customer-documents-by-type-uri: /v1/crm/customers/customer/documents/{documentType}
+            delete-customer-document-by-id-uri: /v1/crm/customers/customer/documents/document-id/{documentId}
+            delete-communication-address: /v1/crm/customers/communication-address
+            load-communication-address: /v1/crm/customers/customer/communication-address
+            marital-list-uri: /v1/crm/customers/marital-status
+            load_account_opening_purpose: /v1/crm/customers/opening-purposes
+            set-marital-status-uri: /v1/crm/customers/customer/marital-status
+            customer-account-uri: /v1/crm/customers/customer/account
+            customer-digital-card-uri: /v1/crm/customers/customer/card-activation
+            service-request-uri: /v1/crm/customers/customer/service-request
+            retrieve-income-source-list-uri: /v1/crm/customers/income-sources
+            retrieve-service-requests-uri: /v1/crm/customers/customer/service-requests
+            validate-account-number-against-id-uri: /v1/crm/customers/customer/existance/account-number/{accountNumber}
+            retrieve-customer-service-request-uri: /v1/crm/customers/customer/service-request-details/retrieve
+            validate-account-number-against-id-invalid-uri: /v1/crm/customers/customer/existance/account-number
+            load-customer-account-products-uri: /v1/crm/customers-products
+            load-customer-eligible-products-uri: /v1/crm/customers-products/eligible
+            add-beneficiary-uri: /v1/customers/customer/beneficiary
+            add-beneficiary-payment-information-uri: /v1/customers/beneficiary/payment-information
+            load-beneficiary-list-uri: /v1/crm/customers/beneficiary
+            update-beneficiary-payment-information-uri: /v1/crm/customers/beneficiary/payment-information
+            delete-beneficiary-uri: /v1/customers/beneficiary/beneficiary-id/{beneficiaryId}
+            delete-beneficiary-payment-info-uri: /v1/customers/beneficiary/payment-information/{beneficiaryPaymentInformationId}
+            load-customer-accounts-uri: /v1/crm/customers/customer/accounts/inquiry
+            delete-additional-mobile-number-uri: /v1/crm/customers/Profile/delete-additional-mobile
+            automation-customer-accounts-uri: /v1/crm/customers/automation/customer/allaccounts
+            automation-approve-service-request-uri: /v1/crm/customers/automation/service-request/approve
+            automation-reject-service-request-uri: /v1/crm/customers/automation/service-request/reject
+            load-annual-income-list-uri: /v1/crm/customers/customer-profile/annual-income
+            load-business-activities-list-uri: /v1/crm/customers/customer-profile/business-activities
+            set-external-bank-card-uri: /v1/crm/customers/customer/external-card
+            set-banking-profile-info-uri: /v1/crm/customers/customer/banking-profile
+            set-email-uri: /v1/crm/customers/customer/email
+            update-default-mobile-number-uri: /v1/crm/customers/customer/mobile-number/default
+            set-additional-mobile-number-uri: /v1/crm/customers/customer/mobile-number/additional
+            set-additional-mobile-number-as-default-uri: /v1/crm/customers/customer/mobile-number/additional/set-as-default
+            delete-external-bank-card-uri: /v1/crm/customers/customer/external-card/{cardSupportingDocumentId}
+            delete-external-bank-card-without-path-variable-uri: /v1/crm/customers/customer/external-card
+            verify-customer-email-uri: /v1/crm/customers/customer/email/verify
+            retrieve-client-id-by-mobile-number-uri: /v1/crm/customers/{mobileNumber}/customer/client-id
+            retrieve-client-id-by-mobile-number-uri-without-path-variable: /v1/crm/customers/customer/client-id
+            create-product-opportunity-uri: /v1/crm/customers/customer/product/opportunity
+            load-all-customer-eligible-products: /v1/crm/customers/eligible-products
+            suspend-service-request_uri: /v1/crm/customers/customer/service-request/suspend
+            disconnect-client-id: /v1/crm/customers/customer/client-id/disconnect
+            close-service-request: /v1/crm/customers/customer/service-request/close
+            update-customer-device-push-uri: /v1/crm/customers/customer/device-id/push-id
+            update-service-request-details-uri: /v1/crm/customers/customer/service-request/details/update
+            load-profession-types-list-uri: /v1/crm/customers/profession-types
+            set-card-turn-on-date: /v1/crm/customers/customer/CardTurnOnDate
+            resume-service-request-uri: /v1/crm/customers/customer/service-request/resume
+            retrieve-customer-srs-uri: /v1/crm/service-requests/customer/service-requests
+            get-all-banks: /v1/crm/banks
+            retrieve-customer-by-mobile-number-for-sprinklr-uri: /crm/v1/sprinklr/mobile-number/{mobileNumber}
+            retrieve-customer-next-kyc-date: /v1/customers/customer/next-kyc-date
+
+          backend:
+            host: http://10.10.94.129
+            api:
+              set-card-turn-on-date: /crm/v1/customers/customer/CardTurnOnDate
+              last-login-date-uri: /crm/v1/customers/{customerId}/login/last-date
+              create-product-opportunity-uri: /crm/v1/customers/customer/opportunity
+              retrieve-client-id-by-mobile-number-uri: /crm/v1/customers/client-id/mobile-number/{mobileNumber}
+              retrieve-customer-summary-info-uri: /crm/v1/customers/customer/summary
+              retrieve-login-history-uri: /crm/v1/customers/customer/login/history
+              Add-login-history: /crm/v1/customers/customer/login/history
+              create-customer-uri: /crm/v1/customers
+              add-document-uri: /crm/v1/customers/customer/document
+              mobile-number-validation-uri: /crm/v1/customers/existance/mobile-number/{mobileNumber}
+              retrieve-customer-by-mobile-number-uri: /crm/v1/customers/mobile-number/{mobileNumber}
+              retrieve-customer-by-national-id-uri: /crm/v1/customers/national-id/
+              retrieve-customer-by-account-id-uri: /crm/v1/customers/account-number/
+              retrieve-customer-by-vpan-uri: /crm/v1/customers/vpan/
+              retrieve-customer-by-client-id-uri: /crm/v1/customers/customer/client-id
+              update-user-uri: /crm/v1/customers/customer/mobile-number
+              disconnect-mobile-number-uri: /crm/v1/customers/mobile-number/disconnect
+              disconnect-additional-mobile-number-uri: /crm/v1/customers/customer/mobile-number/additional/disconnect
+              authentication-uri: /crm/v1/authenticate
+              customer-onboarded-uri: /crm/v1/customers/onboarded
+              customer-onboarded-with-the-same-national-id-uri: /crm/v1/customers/not-onboarded/{nationalId}
+              update-customer-info-uri: /crm/v1/Customers/customer/profile
+              terms-and-conditions-uri: /crm/v1/Customers/terms-and-conditions
+              retrieve-customer-by-customer-id-uri: /crm/v1/customers/customer
+              retrieve-customer-by-request-body-customer-id-uri: /crm/v1/customers/customer/retrieve
+              customer-onboarded-with-the-customer-id-uri: /crm/v1/customers/not-onboarded
+              set-preferred-language-uri: /crm/v1/customers/customer/preferred-langage
+              customer-exist-with-the-national-id-uri: /crm/v1/customers/customer/not-existance/national-id/{nationalId}
+              communication-address-uri: /crm/v1/customers/customer/communication-address
+              load-customer-documents-by-type-uri: /crm/v1/customers/customer/documents/{documentType}
+              delete-customer-document-by-id-uri: /crm/v1/customers/customer/documents/{documentId}
+              delete-communication-address-uri: /crm/v1/customers/customer/communication-address/delete
+              retrieve-profession-list-uri: /crm/v1/customers/professions
+              load-communication-address-uri: /crm/v1/customers/customer/communication-address
+              load-account-opening-purpose: /crm/v1/customers/opening-purposes
+              set-profession-uri: /crm/v1/customers/customer/profession
+              marital-list-uri: /crm/v1/customers/marital-statuses
+              set-marital-status-uri: /crm/v1/customers/customer/marital-status
+              customer-account-uri: /crm/v1/customers/customer/account
+              customer-digital-card-uri: /crm/v1/customers/customer/card-activation
+              service-request-uri: /crm/v1/customers/customer/service-request
+              update-customer-status-uri: /crm/v1/customers/customer/status
+              retrieve-income-source-list-uri: /crm/v1/customers/income-sources
+              retrieve-service-requests-uri: /crm/v1/customers/customer/service-requests
+              validate-account-number-against-id-uri: /crm/v1/customers/customer/existance/account-number/{accountNumber}
+              retrieve-customer-service-request-uri: /crm/v1/customers/customer/service-request-details
+              load-products-uri: /crm/v1/products
+              load-customer-eligible-products-uri: /crm/v1/products
+              load-customer-account-products-uri: /crm/v1/products/{productId}/product-details
+              add-beneficiary-uri: /crm/v1/beneficiaries
+              add-beneficiary-payment-information-uri: crm/v1/beneficiaries/payment-information
+              load-beneficiary-list-uri: /crm/v1/beneficiaries
+              update-beneficiary-payment-information-uri: /crm/v1/beneficiaries/payment-information
+              delete-beneficiary-uri: /crm/v1/beneficiaries
+              delete-beneficiary-payment-info-uri: /crm/v1/beneficiaries/payment-information
+              load-customer-accounts-uri: /crm/v1/customers/customer/accounts
+              delete-additional-mobile-number-uri: /crm/v1/customers/customer/mobile-number/additional
+              load-customer-all-accounts-uri: /crm/v1/customers/customer/allaccounts
+              approve-service-request-uri: /crm/v1/customers/customer/service-request/approve/{serviceRequestNumber}
+              reject-service-request-uri: /crm/v1/customers/customer/service-request/reject/{serviceRequestNumber}
+              load-annual-income-list-uri: /crm/v1/customers/annual-income-list
+              load-business-activities-list-uri: /crm/v1/customers/business-activity-list
+              set-external-bank-card-uri: /crm/v1/customers/customer/external-bank-card
+              set-banking-profile-info-uri: /crm/v1/customers/customer/banking-profile-info
+              set-email-uri: /crm/v1/customers/customer/email
+              delete-external-bank-card-uri: /crm/v1/customers/customer/external-bank-card/{cardSupportingDocumentId}
+              update-default-mobile-number-uri: /crm/v1/customers/customer/mobile-number/default
+              set-additional-mobile-number-uri: /crm/v1/customers/customer/mobile-number/additional
+              set-additional-mobile-number-as-default-uri: /crm/v1/customers/customer/mobile-number/additional/set-as-default
+              verify-customer-email-uri: /crm/v1/customers/customer/email/verify
+              load-all-customer-eligible-products: /crm/v1/products/tree
+              disconnect-client-id-uri: /crm/v1/customers/customer/client-id/disconnect
+              suspend-service-request-uri: /crm/v1/customers/customer/service-request/suspend
+              close-service-request-uri: crm/v1/customers/customer/service-request/close
+              update-customer-device-push-uri: crm/v1/customers/customer/device-id/push-id
+              update-service-request-details-uri: /crm/v1/customers/customer/service-request/details
+              load-profession-types-list-uri: /crm/v1/customers/profession-types
+              resume-service-request-uri: /crm/v1/customers/customer/service-request/resume
+              load-customer-srs-uri: /crm/v1/service-requests/customer/service-requests
+              get-all-banks: /crm/v1/banks
+              retrieve-customer-by-mobile-number-for-sprinklr-uri: /crm/v1/sprinklr/mobile-number/{mobileNumber}
+              retrieve-customer-next-kyc-date: /crm/v1/customers/customer/next-kyc-date
+
+        cso-microgateway:
+          application-version: '@project.version@'
+          host: http://localhost:8080/personProfileMock
+          host1: http://cso-microgateway.dev.apps.openshift.dev.mdi
+          base-uri: /mgw/v1/cso
+          api:
+          api1: /customer/data
+          backend:
+            host: https://ekycsandbox.ecards.com.eg
+            api:
+              customer-data-uri: /api/v1/root-of-trust/inquire-person/
+          velocity-templates-path:
+            request-template: templates/RequestTemplate.vm
+            person-profile: mocked-responses/MockedPersonProfile.vm
+          channelId: Atos
+          requestId: 64949
+
+        dms-microgateway:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          host: http://dms-microgateway.dev.apps.openshift.dev.mdi
+          api:
+            create-folder-uri: /v1/dms/folders
+            upload-file-uri: /v1/dms/upload
+            document-meta-data-uri: /v1/dms/document/metadata
+            retrieve-document-details-uri: /v1/dms/document/metadata/retrieve
+            load-documents-by-document-type-uri: /v1/dms/documents/load
+            delete-document-uri: /v1/dms/document/delete
+            download-file-uri: /v1/dms/download
+            health-base-url: /v1/dms/mgmt/health
+            move-documents-uri: /v1/dms/documents/move
+            delete-documents-uri: /v1/dms/documents/delete
+          velocity-templates-path:
+          backend:
+            host: http://devdms.external.dev.mdi/sites/crm
+            api:
+              context-info-uri: /_api/contextinfo
+              create-folder-uri: /_vti_bin/DMSNestedFolder.svc/DMSServiceCreateFolders
+              upload-file-uri: /_api/web/GetFolderByServerRelativeUrl('{relative-path}')/Files/add(url='{file-name}',overwrite=false)?$expand=ListItemAllFields
+              update-meta-data-using-document-id-uri: /_api/web/lists/getbytitle('{document-library-title}')/items({document-id})
+              download-document-uri: /_api/web/GetFileByServerRelativeUrl('/{relative-path}/{file-name}')/$value
+              load-documents-by-document-type-uri: /_api/web/lists/getbytitle('{document-library-title}')/GetItems?$expand=File&$select=Id,DocumentType,File/ServerRelativeUrl,File/Name,File/TimeCreated,File/Length
+              retrieve-document-details-by-id-uri: /_api/web/lists/getbytitle('{document-library-title}')/items({document-id})?$select=DocumentType,Permanent,File/Length,File/Name,File/ServerRelativeUrl,File/TimeCreated&$expand=File
+              delete-document-by-id-uri: /_vti_bin/DMSDelete.svc/DMSDeleteByID
+              move-document-uri: /_vti_bin/MoveBulkDocuments.svc/DMSServiceMoveDocuments
+              delete-document-uri: /_vti_bin/DMSDelete.svc/DMSBulkDeleteByFolder
+            document-library: DMSTest
+          config:
+            kyc-meta-data: SP.Data.LeadItem
+
+
+        idemia-microgateway:
+          base-uri: /mgw
+          api:
+            customer-id-scan: /v1/idemia/customer/scan
+
+        identity-manager-microgateway: #im-microgateway
+          application-version: '@project.version@'
+          host: http://identity-manager-microgateway.dev.apps.openshift.dev.mdi #Dev env
+          # host:  http://localhost:7085
+          base-uri: /mgw
+          api:
+            create-user-profile: /v1/iam/profiles
+            password-validation: /v1/iam/password/validate
+            reset-user-password: /v1/iam/password/reset
+            user-name-validation: /v1/iam/user-name/validate
+            retreive-user-name: /v1/iam/user-name/recover
+            change-user-password: /v1/iam/password/change
+            person-profile:
+              uri: /v1/iam/persons/person-profile/username/{username}
+              invalid-uri: /v1/iam/persons/person-profile/username
+            unlock-user:
+              uri: /v1/iam/user/unlock/username/{username}
+              invalid-uri: /v1/iam/user/unlock/username
+              domain: vswsitldap01:389/Partition=O=MdiApp,dc=mdi,dc=ext/SSL=False/AuthType=WindowsPrincipalUseServiceCredentials
+          velocity-templates-path:
+            query-user: pm-request-templates/ResetPasswordQueryUserRequest.vm
+            select-reset-password-flow: pm-request-templates/ResetPasswordSelectFlow.vm
+            execute-captcha: pm-request-templates/ResetPasswordExecuteWithCaptcha.vm
+            reset-password: pm-request-templates/ResetUserPassword.vm
+            select-change-password-flow: pm-request-templates/ChangePasswordSelectFlow.vm
+            authenticate-user: pm-request-templates/ChangePasswordAuthenticateUser.vm
+            change-password: pm-request-templates/ChangePassword.vm
+          backend:
+            host: http://vswsitoimw01.dev.mdi
+            password-manager-host: VSWSITPMW01.dev.mdi
+            password-manager:
+              host: http://VSWSITPMW01.dev.mdi
+              api:
+                get-session-id: /PMUserADLDS/api/a/Identification/State
+                query-username: /PMUserADLDS/api/s/{SessionID}/a/Identification/Runtime
+                select-username: /PMUserADLDS/api/s/{SessionID}/a/Identification/Execute
+                select-workflow: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/a/SelectWorkflow/Runtime
+                execute-workflow: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/a/SelectWorkflow/Execute
+                reset-user-password:
+                  authenticate-captcha: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/wf/Custom_8C85B6B3-25DE-4CA8-9F9C-D8EC81BF1C58/a/Captcha_1/Runtime
+                  execute-authenticate-captcha: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/wf/Custom_8C85B6B3-25DE-4CA8-9F9C-D8EC81BF1C58/Execute
+                  reset-user-password: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/wf/Custom_8C85B6B3-25DE-4CA8-9F9C-D8EC81BF1C58/a/PasswordResetAD_1/Runtime
+                  execute-reset-user-password: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/wf/Custom_8C85B6B3-25DE-4CA8-9F9C-D8EC81BF1C58/Execute
+                  check-reset-user-password-state: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/wf/Custom_8C85B6B3-25DE-4CA8-9F9C-D8EC81BF1C58/a/PasswordResetAD_1/State
+                change-user-password:
+                  authenticate-user: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/wf/Custom_47B2A1DF-E583-433A-9E82-8C9546E606EF/a/AuthenticationWithAD_1/Runtime
+                  execute-authenticate-user: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/wf/Custom_47B2A1DF-E583-433A-9E82-8C9546E606EF/Execute
+                  change-user-password: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/wf/Custom_47B2A1DF-E583-433A-9E82-8C9546E606EF/a/PasswordChangeAD_1/Runtime
+                  execute-change-user-password: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/wf/Custom_47B2A1DF-E583-433A-9E82-8C9546E606EF/Execute
+                  check-change-user-password-action-status: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/wf/Custom_47B2A1DF-E583-433A-9E82-8C9546E606EF/a/ShowStatus/State
+                  check-change-user-password-authenticate-user-state: /PMUserADLDS/api/s/{SessionID}/mp/{ManagementPolicy}/wf/Custom_47B2A1DF-E583-433A-9E82-8C9546E606EF/a/AuthenticationWithAD_1/State
+              response-validations:
+                reset-password-select-user: SelectWorkflow
+                reset-password-execute-workflow: Captcha_1
+                reset-password-execute-captcha: PasswordResetAD_1
+                reset-password-execute-reset-password: ShowStatus
+                change-password-execute-workflow: AuthenticationWithAD_1
+                change-password-execute-authenticate-user: PasswordChangeAD_1
+                change-password-execute-change-password: ShowStatus
+                reset-password-state: 1
+              config:
+                reset-password:
+                  management-policy: c3505b72-96f8-4959-925d-7b838b17ab77
+            api:
+              create-user-profile: /AppServer/api/entity/Person
+              password-validation: &password-validation /AppServer/api/script/CCC_ValidatePassword
+              user-name-validation: &user-name-validation /AppServer/api/script/CCC_ValidateUserName
+              retrieve-username: /AppServer/api/entities/Person?where=CustomProperty01='{clientId}'
+              reset-user-password: /AppServer/api/entity/Person/{user-id}
+              loginUrl: /AppServer/auth/apphost
+              personProfileUrl: /AppServer/api/entities/person
+              unlock-user: /PMUserADLDS/ws/PMUU
+          config:
+            username-suggestions-count: 3
+
+        fcm-microgateway:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          api:
+            black-list-uri: /v1/fcm/customers/not-black-listed/national-id/{nationalId}
+          velocity-templates-path:
+          backend:
+            host: http://mockserver.dev.apps.openshift.dev.mdi/castlemock/mock/rest/project/CBgM0e/application/nFKQtb
+            api:
+              get-black-list-status-uri: /v1/fcm/customers/black-listed/national-id/
+
+        workflow-microgateway:
+          application-version: '@project.version@'
+          base-uri: /process
+          host: http://process-workflow-microgateway.dev.apps.openshift.dev.mdi
+          api:
+            transfer-to-merchant-basic-auth: /v1/system/secure/bpm/accounts/customer/account/merchant/transfer
+            start-onboarding: /v1/bpm/customer/onboarding/start
+            check-customer-status: /v1/bpm/customer/status/check
+            continue-onboarding: /v1/bpm/customer/onboarding/continue
+            service-request-complete: /v1/bpm/customer/onboarding/service-request/complete
+            order-card: /v1/bpm/card/order
+            order-online-card: /v1/bpm/online-card/order
+            open-additional-account: /v1/bpm/additional-account/open
+            transfer-to-one-bank: /v1/bpm/accounts/customer/account/OneBank/transfer
+            transfer-to-other-bank: /v1/bpm/accounts/customer/account/other-bank/transfer
+            transfer-between-my-accounts: /v1/bpm/accounts/customer/account/self-account/transfer
+            fund-my-prepaid-card-from-related-internal-source: /v1/bpm/accounts/customer/prepaid-card/fund
+            fund-my-account-from-related-internal-source: /v1/bpm/accounts/customer/account/fund
+            create-fatcaSR: /v1/bpm/customer/fatca/service-request/create
+            fund-my-account-from-external-card: /v1/bpm/accounts/customer/external-card/fund
+            deactivate-physical-card-uri: /v1/bpm/service-requerst/cards/customer/card/physical/deactivate
+            create-travel-memo: /v1/bpm/service-request/cards/customer/card/travel-memo/add
+            close-prepaid-card: /v1/bpm/service-requerst/cards/customer/prepaid-card/close
+            replace-customer-card: /v1/bpm/cards/customer/card/replace
+            retry-continue-onboarding: /v1/bpm/customer/onboarding/retry
+            request-stamped-statement-uri: /v1/bpm/accounts/customer/account/statement/request
+            digital-card-closure-and-retention-uri: /v1/bpm/service-requerst/cards/customer/card/close
+            report-lost-or-stolen-card-uri: /v1/bpm/service-request/cards/customer/card/report
+            transfer-to-merchant: /v1/bpm/accounts/customer/account/merchant/transfer
+            resume-service-request: /v1/bpm/customers/customer/service-request/resume
+          backend:
+            host: https://vsrsitapch02.dev.mdi:443
+            api:
+              start-onboarding: /suite/webapi/check-onboarding-customer
+              check-customer-status: /suite/webapi/retrieve-customer-status
+              continue-onboarding: /suite/webapi/start-onboarding-customer
+              service-request-complete: /suite/webapi/service-request-response
+              order-card: /suite/webapi/order-physical-card
+              order-online-card: /suite/webapi/open-online-card
+              open-additional-account: /suite/webapi/open-additional-account
+              transfer-to-one-bank: /suite/webapi/transfer-to-one-bank
+              transfer-to-other-bank: /suite/webapi/transfer-to-other-bank
+              transfer-between-my-accounts: /suite/webapi/transfer-between-my-accounts
+              fund-my-prepaid-card-from-related-internal-source: /suite/webapi/transfer-between-my-accounts
+              fund-my-account-from-related-internal-source: /suite/webapi/transfer-between-my-accounts
+              create-fatcaSR: /suite/webapi/create-fatca-customer
+              fund-my-account-from-external-card: /suite/webapi/fund-my-account
+              deactivate-physical-card: /suite/webapi/deactivate-physical-card
+              create-travel-memo: /suite/webapi/create-travel-memo
+              close-prepaid-card: /suite/webapi/close-online-card
+              replace-customer-card: /suite/webapi/replace-card
+              request-stamped-statement: /suite/webapi/request-stamped-statement
+              digital-card-closure-and-retention: /suite/webapi/close-card
+              report-lost-or-stolen-card-uri: /suite/webapi/report-lost-or-stolen
+              transfer-to-merchant: /suite/webapi/transfer-to-merchant
+              resume-service-request: /suite/webapi/resume-service-request
+            config:
+              mongodb:
+                url: mongodb://procuser:Procuser=PA##@vsrdevmongo01.dev.mdi:27017/?authSource=
+                dbname: process-management-dev-db
+              minVcnAmount: 50
+
+              appian-keys:
+                start-onboarding-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzNDVkY2RhYi04ZmJmLTRiNjctYmJkMS1lMTYxMDdlODUwZGQifQ.NH4wGtGV-P3IkKgX6LipCa-ZSMJi75WL6NdggJKlSzM
+                check-customer-status-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzNDVkY2RhYi04ZmJmLTRiNjctYmJkMS1lMTYxMDdlODUwZGQifQ.NH4wGtGV-P3IkKgX6LipCa-ZSMJi75WL6NdggJKlSzM
+                continue-onboarding-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzNDVkY2RhYi04ZmJmLTRiNjctYmJkMS1lMTYxMDdlODUwZGQifQ.NH4wGtGV-P3IkKgX6LipCa-ZSMJi75WL6NdggJKlSzM
+                service-request-complete-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzNDVkY2RhYi04ZmJmLTRiNjctYmJkMS1lMTYxMDdlODUwZGQifQ.NH4wGtGV-P3IkKgX6LipCa-ZSMJi75WL6NdggJKlSzM
+                order-card-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZWZiZGY0ZC1jZTg3LTQ5NGQtYTFkMi1hNDAzNzc0NDYwZjIifQ.kkwJI74INf-68-qpy_pntn-H8czNEzD8I_jvty-rN0M
+                order-online-card-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZWZiZGY0ZC1jZTg3LTQ5NGQtYTFkMi1hNDAzNzc0NDYwZjIifQ.kkwJI74INf-68-qpy_pntn-H8czNEzD8I_jvty-rN0M
+                open-additional-account-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3NjBiMGZkNy0xYzc4LTQ0MzUtODVlNy1kNTQ0NmZlMDJmZGQifQ.ltK3X4mAcp6KdBintfsxkFqfE-CCtXpBm3hoxx-EJbI
+                transfer-to-one-bank-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MTQzMGVhYS0xY2IxLTRjOTYtYjc0MS1jNTkzYjNiNjBkMWIifQ.YOVauST9OkWVOougV1XSlrTEnfgT5UNvl87UYHrdztA
+                transfer-to-other-bank-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MTQzMGVhYS0xY2IxLTRjOTYtYjc0MS1jNTkzYjNiNjBkMWIifQ.YOVauST9OkWVOougV1XSlrTEnfgT5UNvl87UYHrdztA
+                transfer-between-my-accounts-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MTQzMGVhYS0xY2IxLTRjOTYtYjc0MS1jNTkzYjNiNjBkMWIifQ.YOVauST9OkWVOougV1XSlrTEnfgT5UNvl87UYHrdztA
+                fund-my-prepaid-card-from-related-internal-source-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MTQzMGVhYS0xY2IxLTRjOTYtYjc0MS1jNTkzYjNiNjBkMWIifQ.YOVauST9OkWVOougV1XSlrTEnfgT5UNvl87UYHrdztA
+                fund-my-account-from-related-internal-source-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MTQzMGVhYS0xY2IxLTRjOTYtYjc0MS1jNTkzYjNiNjBkMWIifQ.YOVauST9OkWVOougV1XSlrTEnfgT5UNvl87UYHrdztA
+                create-fatcaSR-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzNDVkY2RhYi04ZmJmLTRiNjctYmJkMS1lMTYxMDdlODUwZGQifQ.NH4wGtGV-P3IkKgX6LipCa-ZSMJi75WL6NdggJKlSzM
+                fund-my-account-from-external-card-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MTQzMGVhYS0xY2IxLTRjOTYtYjc0MS1jNTkzYjNiNjBkMWIifQ.YOVauST9OkWVOougV1XSlrTEnfgT5UNvl87UYHrdztA
+                deactivate-physical-card-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZWZiZGY0ZC1jZTg3LTQ5NGQtYTFkMi1hNDAzNzc0NDYwZjIifQ.kkwJI74INf-68-qpy_pntn-H8czNEzD8I_jvty-rN0M
+                create-travel-memo-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZWZiZGY0ZC1jZTg3LTQ5NGQtYTFkMi1hNDAzNzc0NDYwZjIifQ.kkwJI74INf-68-qpy_pntn-H8czNEzD8I_jvty-rN0M
+                close-prepaid-card-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZWZiZGY0ZC1jZTg3LTQ5NGQtYTFkMi1hNDAzNzc0NDYwZjIifQ.kkwJI74INf-68-qpy_pntn-H8czNEzD8I_jvty-rN0M
+                replace-customer-card-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZWZiZGY0ZC1jZTg3LTQ5NGQtYTFkMi1hNDAzNzc0NDYwZjIifQ.kkwJI74INf-68-qpy_pntn-H8czNEzD8I_jvty-rN0M
+                request-stamped-statement-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3NjBiMGZkNy0xYzc4LTQ0MzUtODVlNy1kNTQ0NmZlMDJmZGQifQ.ltK3X4mAcp6KdBintfsxkFqfE-CCtXpBm3hoxx-EJbI
+                digital-card-closure-and-retention-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZWZiZGY0ZC1jZTg3LTQ5NGQtYTFkMi1hNDAzNzc0NDYwZjIifQ.kkwJI74INf-68-qpy_pntn-H8czNEzD8I_jvty-rN0M
+                report-lost-or-stolen-card-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZWZiZGY0ZC1jZTg3LTQ5NGQtYTFkMi1hNDAzNzc0NDYwZjIifQ.kkwJI74INf-68-qpy_pntn-H8czNEzD8I_jvty-rN0M
+                resume-service-request-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2MGI5MTYwMy1kZjVkLTQyMGItYTUzMC01NzM4Yzk1OTEwNGYifQ.plhRtNqKDGy4SUBG_t87u0Venn3UaVcGkxKov6YgXiU
+
+          profession:
+            types:
+              - profession-type: 1
+                description-ar: Salaried
+                description-en: براتب
+                needs-profession-flag: false
+                needs-document: true
+
+              - profession-type: 2
+                description-ar: Self-employed
+                description-en: تعمل لحسابك
+                needs-profession-flag: false
+                needs-document: true
+
+              - profession-type: 3
+                description-ar: Freelancer
+                description-en: حر
+                needs-profession-flag: false
+                needs-document: true
+
+              - profession-type: 4
+                description-ar: Special Profession
+                description-en: مهنة خاصة
+                needs-profession-flag: true
+                needs-document: false
+
+              - profession-type: 5
+                description-ar: Student
+                description-en: طالب
+                needs-profession-flag: false
+                needs-document: true
+
+              - profession-type: 6
+                description-ar: Retired
+                description-en: متقاعد
+                needs-profession-flag: false
+                needs-document: true
+
+              - profession-type: 7
+                description-ar: Unemployed
+                description-en: لا أعمل
+                needs-profession-flag: false
+                needs-document: true
+
+              - profession-type: 7
+                description-ar: Housewife
+                description-en: ربة منزل
+                needs-profession-flag: false
+                needs-document: true
+
+        meniga-mgw:
+          application-version: '@project.version@'
+          host: http://meniga-mgw.dev.apps.openshift.dev.mdi/
+          base-uri: /mgw/v1/meniga
+          base-uri-test-dynamic: /mgw/v1/meniga-test
+          api:
+            transactions:
+
+              get-transactions-series-aggregated-time: /transactions/series
+              get-filtered-transactions-series-aggregated-time: /filtered/transactions/series
+          backend:
+            host: http://api.vswdevmniga01.dev.mdi
+            base-uri: /user/v1
+            api:
+              authenticate-user: /authentication/sso/jwt-provider
+              transactions-series: /transactions/series
+            config:
+              menifa-uri-config: ?include=Account,Merchant&fields=transactions.categoryId,transactions.date,transactions.id,transactions.accountId,transactions.amount,statistics.total,statistics.currentMonthTotal
+
+        pfm-microgateway:
+          base-uri: /mgw/v1/pfm
+          base-uri-test-dynamic: /mgw/v1/pfm-test
+          api:
+            categories:
+              base-uri: categories
+              category-by-id: categories/{categoryId}
+              get-category-types: categories/types
+              get-category-ranks: categories/ranks
+
+            future-payments:
+              base-uri: future-payments
+              scheduled-payments: future-payments/scheduled-payments
+
+            merchants:
+              base-uri: merchants
+              get-merchant-by-id: merchants/{id}
+              merchants-top: merchants/top
+              merchants-aggregates: merchants/aggregates
+
+            payments-tags-terms:
+              list-all-payments-uri: payments
+              get-payment-by-id-uri: payments/{id}
+
+              get-all-tags-uri: tags
+              get-tags-by-popularity-uri: tags/popular
+              get-tag-by-id-uri: tags/{id}
+
+              get-all-terms-uri: terms
+              get-term-by-id-uri: terms/{typeId}
+              get-term-types-uri: terms/types
+              accept-term-type-uri: terms/{typeId}/accept
+              decline-term-type-uri: terms/{typeId}/decline
+
+            accounts:
+              base-uri: /accounts
+              get-all-accounts:
+              create-account:
+              get-account-by-id: /{id}
+              update-account-by-id: /{id}
+              delete-account-by-id: /{id}
+              get-account-types: /account-types
+              get-account-type-by-id: /account-types/{id}
+              get-account-categories: /account-categories
+              get-account-authorization-types: /authorization-types
+              get-account-metadata-by-id: /{id}/metadata
+              update-account-metadata-by-id: /{id}/metadata
+              get-account-parameter-metadata-by-id: /{id}/metadata/{name}
+              get-account-balance-history: /{id}/history
+
+
+            transactions:
+              base-uri: /transactions
+              delete-transactions-list:
+              get-transactions-list:
+              create-transaction:
+              update-transactions-list:
+              get-transactions-series-aggregated-time: /series
+              get-search: /suggestions
+              delete-transaction-by-id: /{id}
+              get-transaction-by-id: /{id}
+              update-transaction-by-id: /{id}
+              get-transaction- list-split-from-transaction: /{id}/split
+              split-transaction-into-two: /{id}/split
+              update-split-transaction-by-transaction-parent-id: /{id}/split
+              create-transaction-comment: /{id}/comments
+              delete-transaction-comment-by-id: /{id}/comments/{commentId}
+              update-transaction-comment-by-id: /{id}/comments/{commentId}
+              create-comment-for-transaction-list-by-ids: /comments
+              recategorize-transactions-by-list-transaction: /recategorize
+              get-transaction-rules: /rules
+              create-transaction-rules: /rules
+              delete-transaction-rule-by-id: /rules/{id}
+              get-transaction-rule-by-id: /rules/{id}
+              update-transaction-rule-by-id: /rules/{id}
+
+            networth:
+              base-uri: /networth
+              networth-first: /networth/first
+              networth-accounts-by-id: /networth/accounts/{accountId}
+              get-networth-types: /networth/types
+              get-networth-intervalgrouping: /networth/intervalgrouping
+              post-networth-accounts: /networth/accounts
+              post-networth-accounts-balancehistory-by-id: /networth/accounts/{accountId}/balancehistory
+              put-networth-accountId-balancehistoryId: /networth/accounts/{accountId}/balancehistory/{balanceHistoryId}
+
+            budgets:
+              base-uri: /budgets
+              budgets-by-id: /budgets/{budgetId}
+              budgets-id-entries: /budgets/{budgetId}/entries
+              budgets-id-entryId: /budgets/{budgetId}/entries/{entryId}
+              budgets-id-rules: /budgets/{budgetId}/rules
+              post-budgets-id-reset: /budgets/{budgetId}/reset
+              delete-budgets-id-rules-id: /budgets/{budgetId}/rules/{ruleId}
+
+            challenges:
+              base-uri: /challenges
+              get-all-challenges: /challenges
+              create-challenges: /challenges
+              delete-challenges-by-id: /challenges/{id}
+              get-challenges-by-id: /challenges/{id}
+              update-challenges-by-id: /challenges/{id}
+              accept-challenges-by-id: /challenges/{id}/accept
+              disable-challenges-by-id: /challenges/{id}/disable
+              enable-challenges-by-id: /challenges/{id}/enable
+              get-challenges-history-by-id: /challenges/{id}/history
+              get-challenges-icons: /challenges/icons
+              get-challenges-icons-by-id: /challenges/icons/{id}
+
+            life-goals:
+              base-uri: /lifegoals
+              get-all-life-goals: /lifegoals
+              get-life-goals-by-id: /lifegoals/{id}
+              get-life-goals-history-by-id: /lifegoals/{id}/history
+              get-life-goals-account-info: /lifegoals/accountinfo
+              create-life-goals: /lifegoals
+              update-life-goals-by-id: /lifegoals/{id}
+              delete-life-goals-by-id: /lifegoals/{id}
+
+          propagate-authorization: true #####
+
+
+        otp-microgateway:
+          application-version: '@project.version@'
+          host: http://otp-microgateway.dev.apps.openshift.dev.mdi
+          base-uri: /mgw
+          api:
+            otp-validation-uri: /v1/otp/validate
+            email-otp-validation-uri: /v1/otp/email/validate
+            receive-otp-uri: /v1/otp/receive
+            send-otp-uri: /v1/otp/send
+            send-otp-mobile-uri: /v1/otp/mobilenumber/send #To be removed after otp revamp
+            send-email-otp-uri: /v1/otp/email/send #To be removed after otp revamp
+            view-instance-uri: /v1/otp/instance/view
+            check-token-status: /v1/otp/user/query
+            unassign-token-uri: /v1/otp/token/unassign
+            query-token-otp-uri: /v1/otp/token/query
+            register-otp-uri: /v1/otp/app/register
+            freeze-token-app-uri: /v1/otp/token/freeze
+            un-freeze-token-app-uri: /v1/otp/token/unfreeze
+            set-password-uri: /v1/otp/password/set
+            reset-password-uri: /v1/otp/password/reset
+            create-user-on-external-domain-uri: /v1/otp/customer/create
+            otp-cif-validation-uri: /v1/otp/customer/validate
+            delete-instance-uri: /v1/otp/instance/delete
+            unlock-user-uri: /v1/otp/user/unlock
+          velocity-templates-paths:
+            admin-login: AdminLogin.vm
+            admin-logoff: AdminLogoff.vm
+            query-token: QueryToken.vm
+            assign-token: AssignToken.vm
+            unassign-token: UnassignUserToken.vm
+            deactivate-token: UnassignToken.vm
+            create-user: CreateUser.vm
+            delete-user: DeleteUser.vm
+            otp-request: OTPRequest.vm
+            query-user: QueryUser.vm
+            generate-mdl: GenerateMdl.vm
+            validate-sms-otp: validate-sms-otp.vm
+            active-instance: ActiveInstance.vm
+            freeze-unfreeze-token-app: FreezUnFreezeRequest.vm
+            set-password: SetPassword.vm
+            reset-password: ResetPasswordRequest.vm
+            create-user-in-external-domain: CreateUserInExternalDomain.vm
+            delete-instance: DeleteInstance.vm
+            unlock-user: UnlockUser.vm
+          backend:
+            host: https://10.10.90.24:8888
+          otp-client:
+            config:
+              receive-otp:
+                template-text-en: please use the code otp to register
+                template-text-ar: برجاء استخدام الكود otp للتسجيل
+              sms-otp-validation-mock: false
+
+
+
+        fawry-microgateway:
+          base-uri: /mgw
+          host:
+          api:
+            categories: /v1/payment-fawry/categories
+            service-providers: /v1/payment-fawry/categories/{categoryKey}/service-providers
+            service-providers-missing-category-key: /v1/payment-fawry/categories/service-providers
+            services: /v1/payment-fawry/categories/{categoryKey}/service-providers/{serviceProviderId}/services
+            services-missing-category-key: /v1/payment-fawry/categories/service-providers/{serviceProviderId}/services
+            services-missing-both: /v1/payment-fawry/categories/service-providers/services
+            services-missing-service-provider-id: /v1/payment-fawry/categories/{categoryKey}/service-providers/services
+            service: /v1/payment-fawry/categories/{categoryKey}/service-providers/{serviceProviderId}/services/{serviceId}
+            service-missing-category-key: /v1/payment-fawry/categories/service-providers/{serviceProviderId}/services/{serviceId}
+            service-missing-both: /v1/payment-fawry/categories/service-providers/services/{serviceId}
+            service-missing-service-provider-id: /v1/payment-fawry/categories/{categoryKey}/service-providers/services/{serviceId}
+
+          velocity-templates-paths:
+            biller-inq-rq: BillersInqRq.vm
+          fawry:
+            visible-categories:
+              - key: BKS
+                name: Bank Service
+                serviceProviders:
+                  - code: "2"
+                    name: Mobinil
+                  - code: "3"
+                    name: Etisalat
+                  - code: "44"
+                    name: Mobile Wallet
+              - key: CIP
+                name: Fawry Card
+                serviceProviders:
+                  - code: "1"
+                    name: Vodafone
+
+        sms-microgateway:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          api:
+            submit-otp-url: /v1/sms-gateway/sms/immediate
+            transactional-url: /v1/sms-gateway/sms/transactional
+            promotional-url: /v1/sms-gateway/sms/promotional
+            batch-url: /v1/sms-gateway/sms/batch
+            batch-with-txt-url: /v1/sms-gateway/sms/batch-with-txt
+            balance-url: /v1/sms-gateway/balance
+            status-url: /v1/sms-gateway/sms/status
+          backend:
+            host: http://10.2.10.208:8000
+            api:
+              submit-otp-url: /sms/submitOTP
+              batch-url: /sms/batch
+              batch-with-txt-url: /sms/batchwithtxt
+              operators-url: /account/operators
+              balance-url: /account/balance
+              transactional-url: /sms/submitTransactional
+              promotional-url: /sms/submitPromotional
+          auth:
+            account-id: 23
+            sender: Onebank
+
+        data-lake-microgateway:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          host: http://data-lake-microgateway.dev.apps.openshift.dev.mdi
+          api:
+            retrieve-countries-uri: /v1/datalake/countries
+            retrieve-other-nationalization-uri-with-path-variable: /v1/datalake/other-nationalization/{id}
+            retrieve-other-nationalization-uri-without-path-variable: /v1/datalake/other-nationalization
+            get-cities-uri: /v1/datalake/country/{countryIso2}/cities
+            get-banks-list-uri: /v1/datalake/banks
+            get-bank-from-iban-uri: /v1/datalake/bank/iban/{iban}
+            get-bank-from-bank-code-uri: /v1/datalake/bank/bank-code/{bankCode}
+            get-bank-from-bank-bic-uri: /v1/datalake/bank/bank-bic/{bankBic}
+            get-atm-locations-uri: /v1/datalake/bank/locations/longitude/{longitude}/latitude/{latitude}
+            get-atm-locations-without-longitude-path-variable: /v1/datalake/bank/locations/longitude/latitude
+            get-atm-locations-without-latitude-path-variable: /v1/datalake/bank/locations/longitude/{longitude}/latitude
+            get-card-closure-reasons-uri: /v1/datalake/card/card-closure-reasons
+          backend:
+            host: http://mockserver.dev.apps.openshift.dev.mdi
+            api:
+              get-cities-uri: /castlemock/mock/rest/project/HBGaYU/application/MyoYSV/{countryIso2}/cities
+              get-all-countries: /castlemock/mock/rest/project/HBGaYU/application/NN5Anm/countries
+              get-all-banks: /castlemock/mock/rest/project/HBGaYU/application/EuQDVn/bankList
+              get-atm-locations: /castlemock/mock/rest/project/HBGaYU/application/22NToG/atm-locations/longitude/{longitude}/latitude/{latitude}
+              get-card-closure-reasons: /castlemock/mock/rest/project/HBGaYU/application/ENoo1Z/card-closure-reasons
+
+        core-banking-microgateway:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          host: http://core-banking-microgateway.dev.apps.openshift.dev.mdi
+          #host: http://localhost:7097
+          api:
+            get-account-locked-amount: /v1/accounts/customer/{accountId}/locked-amounts
+            create-onboarding-customer-uri: /v1/onboarding/customers/customer
+            create-current-account-uri: /v1/accounts/current-account
+            load-customer-accounts-uri: /v1/accounts
+            load-customer-account-by-account-id-uri: /v1/accounts/{accountId}
+            load-customer-accounts-by-identifier-uri: /v1/accounts/inquiry
+            set-account-alias-uri: /v1/accounts/account/alias/update
+            load-cutomer-eligible-products-uri: /v1/products/{productLineId}/customer/eligible-products
+            create-fatca-customer-uri: /v1/onboarding/customers/fatca
+            transfer-money: /v1/accounts/transfer
+            retreive-posting-restrictions: /v1/accounts/account/posting-restrictions
+            customer-posting-restrication: /v1/posting-restrictions
+            account-posting-restrictions-uri: /v1/accounts-posting-restrictions
+            delete-locked-amount: /v1/locked-amount/{lockedAmountId}
+            create-locked-amount: /v1/locked-amount
+            get-customer-info: /v1/customer
+            retreive-account-transaction-details: /v1/accounts/{accountId}/transactions/details
+            retrieve-closed-account-uri: /v1/accounts/closed
+            customer-posting-restrication-param: /v1/customers/customer/{customerId}/posting-restrictions
+            account-posting-restrictions-param-uri: /v1/accounts/account/posting-restrictions/{customerId}
+            retrieve-accounts-transactions: /v1/accounts/account/{accountId}/transactions
+            reverse-transaction: /v1/accounts/customer/account/transactions/{transactionReference}/reverse
+            get-deposit: /v1/holdings/deposits/{depositId}
+            term-deposit: /v1/holdings/deposits/termDeposits
+            get-deposits-by-customer-id: /v1/holdings/customers/deposits
+            get-payment-schedules: /v1/holdings/arrangements/{arrangementId}/paymentSchedules
+            close-account-errors-uri: /v1/accounts/account/close/errors/arrangement-id/{arrangementId}
+            close-account-errors-details-uri: /v1/accounts/account/close/errors/details/arrangement-id/{arrangementId}
+            simulate-account-closure-uri: /v1/accounts/account/closure/simulate
+            get-pay-off-uri: /v1/accounts/pay-off/arrangement-id/{arrangementId}
+            close-account-uri: /v1/accounts/account/close
+            capture-bill-uri: /v1/accounts/account/bill/capture
+          backend:
+            host: http://10.10.90.40:9083
+            exclusions:
+              create-current-account: O-12187,O-12005,O-12003
+            override:
+              create-fatca-customer: O-11320
+              simulate-account-closure: O-12348
+              account-closure-final-account: O-11548
+              duplicate-statement-generate: O-12187
+              capitalise-charge: O-10987
+            company-id: EG0011001
+            api:
+              get-account-locked-amount: /MDIDELIV/api/v1.0.0/holdings/accounts/reservedFunds
+              create-onboarding-customer: /MDIDELIV/api/v1.0.0/party/customers/onboarding/customer/
+              create-current-account: /MDICORE/api/v2.0.0/holdings/accounts/currentAccounts
+              load-customer-accounts: /MDIDELIV/api/v1.0.0/holdings/accounts
+              set-account-alias-uri: /MDIDELIV/api/v1.0.0/product/updateAlternateAccount/{arrangement-id}
+              load-cutomer-eligible-products: /MDICORE/api/v1.0.0/product/customers/{customer-id}/eligibleProducts
+              transfer-money: /MDIDELIV/api/v1.0.0/order/createpaymentorder
+              create-fatca-customer-uri: /MDIDELIV/api/v1.0.0/party/customers/{customerId}/fatca
+              retreive-posting-restrictions-uri: /MDICORE/api/v4.0.0/party/customers/postingRestrictions?customerId={customerId}
+              account-posting-restrictions-uri: /MDIDELIV/api/v1.0.0/holdings/account/postingrestriction?customerId={customerId}
+              get-posting-restrictions-uri: /MDIDELIV/api/v1.0.0/party/customer/postingrestriction?customerId={customerId}
+              edit-posting-restrictions-uri: /MDIDELIV/api/v1.0.0/party/customers/onboarding/customer/{customerId}
+              delete-locked-account-uri: /MDIDELIV/api/v1.0.0/holdings/aclockedevents/{lockedAmountId}
+              create-locked-account-uri: /MDIDELIV/api/v1.0.0/holdings/create/lockedAmount
+              get-customer-info: /MDICORE/api/v4.0.0/party/customers/{customerId}
+              retreive-account-transaction-details: /MDIDELIV/api/v1.0.0/product/products/transactions
+              retrieve-closed-accounts-uri: /MDIDELIV/api/v1.0.0/holdings/arrangementclosed
+              retrieve-accounts-transactions: /MDIDELIV/api/v1.0.0/holdings/accounts/{accountId}/transaction
+              retrieve-sorted-account-transactions: /MDIDELIV/api/v1.0.0/holdings/accounts/{accountId}/sortedTransaction
+              reverse-transaction: /MDIDELIV/api/v1.0.0/party/payment/reverse/{transactionReference}
+              get-deposit: /MDICORE/api/v2.0.0/holdings/deposits/{depositId}
+              term-deposit: /MDIDELIV/api/v1.0.0/holdings/deposits/termDeposits
+              get-deposits-by-customer-id: /MDICORE/api/v1.0.0/holdings/customers/{customerId}/deposits
+              get-payment-schedules: /MDICORE/api/v3.0.0/holdings/arrangements/{arrangementId}/paymentSchedules
+              close-account-errors-uri: /MDIDELIV/api/v1.0.0/holdings/account/closure/errors?arrangementId={arrangementId}
+              close-account-errors-details-uri: /MDIDELIV/api/v1.0.0/party/account/closure/errors/details?accountId={arrangementId}
+              simulate-account-closure-uri: /MDIDELIV/api/v1.0.0/party/products/{arrangementId}/simulateaccountclosure
+              get-pay-off-uri: /MDICORE/api/v3.0.0/holdings/loans/{arrangementId}/payoffCalculations
+              close-account-uri: /MDIDELIV/api/v1.0.0/holdings/accountClosure/{arrangementId}
+              capture-bill-uri: /MDIDELIV/api/v1.0.0/product/captureBill/{arrangementId}
+            config:
+              channel-name: IRIS
+              payment-category: Cash
+              Authorization: Basic SU5QVVRUOjEyMzQ1Ng==
+              fatca:
+                fixed: true
+                dates-default:
+                  expiry-date: '2025-01-01'
+                  received-date: '2022-01-01'
+                  request-date: '2022-01-01'
+                  expiry-date-after-no-of-months: 36
+          config:
+            max-trial-number: 2
+        cms-microgateway:
+          application-version: '@project.version@'
+          host: http://cms-microgateway.dev.apps.openshift.dev.mdi
+          base-uri: /mgw
+          api:
+            get-card-risk-details: /v1/cards/customer/card/risk
+            retrieve-card-pin-uri: /v1/cards/card/pin/retrieve
+            change-card-pin-uri: /v1/cards/card/pin/change
+            close-card-uri: /v1/cards/customer/card/close
+            replace-card-uri: /v1/cards/customer/card/replace
+            issue-card: /v1/cms/issuance/issuer-directives
+            inquire-transaction: /v1/cms/txn/transaction-log-inquiry
+            create-claim: /v1/cms/claims/claim
+            restrictions-risk-preferences: /v1/cms/risk/restrictions-preferences
+            account-card-inquiry-url: /v1/cms/cards/inquiry
+            customer-account-card-inquiry-url: /v1/cms/customer/card/inquiry
+            card-issuer-risk-url: /v1/cms/inquiry/card-issuer-risk
+            validate-card-credentials-url: /v1/cms/card/validate
+            fees-applicable-on-card-url: /v1/cms/card/feesApplicable
+            inquire-claims-url: /v1/cms/claims/InquireClaims
+            set-risk-override-url: /v1/cms/risk/set-risk-override
+            update-risk-preferences-url: /v1/cms/cards/customer/card/restrictions/manage
+            card-status-url: /v1/cms/card/status
+            set-update-address-url: /v1/cms/card/delivery-address
+            embossing-information-url: /v1/cms/card/embossing-info
+            update-card-auth-param-url: /v1/cms/card/auth-param
+            move-card-to-pending-batch-url: /v1/cms/card/order
+            load-card-eligible-products: /v1/cms/card/products
+            decrypt-pan-url: /v1/cms/cards/card/pan/decrypt
+            encrypt-pan-url: /v1/cms/cards/card/pan/encrypt
+            account-load-url: /v1/cms/cards/customer/prepaid-card/load
+            account-unload-url: /v1/cms/cards/customer/prepaid-card/unload
+            add-supporting-document: /v1/cms/customer/supporting-document
+            update-supporting-document: /v1/cms/customer/supporting-document
+            delete-supporting-document: /v1/cms/customer/supporting-document/remove
+            get-card-restrictions-url: /v1/cards/customer/card/restrictions/retrieve
+            reset-pin-trial-card: /v1/card/pin-tries/reset
+            validate-customer-card-uri: /v1/cms/customer/card/validate
+            manage-linkage-accounts: /v1/cms/cards/customer/card/account/linkage/manage
+            update-card-status-url: /v1/cms/card/update-card-status
+            inquire-prepaid-transaction-uri: /v1/cms/txn/prepaid-transaction
+            configs-codes-description-lookup-uri: /v1/cms/configs/codes-description/lookup
+            add-frozen-id-uri: /v1/cms/customer/frozen/add
+            remove-frozen-id-uri: /v1/cms/customer/frozen/remove
+          backend:
+            host: http://10.10.94.70:9080/cortex-core-ws-rest
+            api:
+              get-card-risk-details: /risk/GetRisk
+              get-card-pin-uri: /pin/GetCardPinUnderZPK
+              set-update-card-pin-uri: /pin/SetUpdateCardPin
+              replace-card-uri: /issuance/IssuerDirectives
+              issue-card-uri: /issuance/IssuerDirectives
+              inquire-transaction-uri: /txn/TransactionLogInquiry
+              create-claim: /claim/CreateClaim
+              restrictions-risk-preferences: /risk/GetRiskPreferences
+              customer-account-card-inquiry-uri: /inquiry/CustomerAccountCardInquiry
+              validate-card-credentials-uri: /txn/GenericCardCheck
+              fees-applicable-on-card-uri: /feecomm/FeeInquiry
+              inquire-claims-uri: /claim/InquireClaims
+              set-risk-override-Uri: /risk/SetRiskOverride
+              update_risk_preferencesUri: /risk/UpdateRiskPreferences
+              set-update-address-uri: /common/SetUpdateAddress
+              embossing-information-url: /issuance/GetEmbossingInformation
+              update-card-auth-param-uri: /card/UpdateCardAuthParam
+              move-card-to-pending-batch-url: /issuance/MoveCardToPendingBatch
+              load-card-eligible-products: /configinq/GetCardProductList
+              card-status-url: /card/UpdateCardStatus
+              encrypt-decrypt-pan-uri: /enc/EncryptDecryptPan
+              account-load-url: /prepaidacc/AccountLoad
+              account-unload-url: /prepaidacc/AccountUnload
+              reset-pin-trial-card: /pin/ResetPinTries
+              manage-linkage-accounts-url: /account/LinkUnlinkAccounts
+              get-card-restrictions-secure-url: /risk/GetRiskPreferences
+              update-card-status-url: /card/UpdateCardStatus
+              get-numeric-description-uri: /configinq/GetNumericDescription
+              inquire-prepaid-transaction-uri: /prepaidacc/AccountItemsSearch
+              add-remove-frozen-id-uri: /customer/AddRemoveCustomerFrozenId
+            config:
+              services:
+                issuance: Issuance
+                customer-account-card-inquiry: CardsDetails
+                embossing-information: GETEMBINFO
+                card-status: CardStatus
+                set-update-address: "SETUPDADD"
+                update-card-auth-param: "UPDAUTHPARAM"
+                load-account: ACCLOAD
+                validate-Card-Credentials: GENCRDCHK
+                encrypt-decrypt-card-pan: ENCDECPAN
+                get-card-restrictions-secure: GETRISKPREF
+                linkage-accounts: LINKUNLINK
+                update-card-status: UPDATECTDSTAT
+                set-risk-override: SETRKSOVRD
+                update-risk-preferences: UPDRISKPREF
+                transaction-log-inquiry: TXNLOGINQ
+                prepaid-transaction-log-inquiry: ACCITEMSSEARCH
+                add-remove-frozen-customer: INQFROZID
+              generics:
+                institution-code: MDI
+                user: TEST
+                cortex-to-t24-internal-transaction-code: 208
+                locale: en
+                source: Mobile
+                load-type: 0
+                load-Source: 0
+                address-role: 0
+                authParam:
+                  ecommerce:
+                    position: 2
+                  deactivate-physical-card:
+                    position: 3
+              header:
+                version: 1.0.0
+              add-remove-frozen-id-details:
+                action:
+                  add: A
+                  remove: D
+              issuer-directives-request-details:
+                batch-class: 4
+                user: TEST
+                action:
+                  create-card: 1
+                  update-embossing-name: 6
+                customer-details-data:
+                  allow-duplicate: true
+                  customer-segment: DEFAULT
+                customer-adress:
+                  ownership-type: O
+                account-details:
+                  allow-duplicate: false
+                  branch-code: 000
+                  credit-limit: 0
+              generic-card-check-details:
+                generic-card-check-pin-data:
+                  key-type: ZPK
+                  key-reference: EMBOSSING_ZPK
+                  pin-block-format: 1
+                  pin-type: 1
+              customer-account-card-inquiry:
+              embossing-information:
+              json-replaceable-codes:
+                - parent-object-path: "/transactionLogInquiryResponseDetails/transactionLogList"
+                  field-name: "mcc"
+                  target-field-name: "mccDesc"
+                  lookup-type: "ab"
+                  language: "EN"
+                  fixed: false
+                  enum-name: ~
+                - parent-object-path: "/transactionLogInquiryResponseDetails/transactionLogList"
+                  field-name: "transactionStatus"
+                  target-field-name: "transactionStatusDesc"
+                  lookup-type: "tstat"
+                  language: "EN"
+                  fixed: false
+                  enum-name: ~
+                - parent-object-path: "/transactionLogInquiryResponseDetails/transactionLogList"
+                  field-name: "responseCode"
+                  target-field-name: "responseCodeDesc"
+                  lookup-type: "r1"
+                  language: "EN"
+                  fixed: false
+                  enum-name: ~
+                - parent-object-path: "/transactionLogInquiryResponseDetails/transactionLogList"
+                  field-name: "transactionCode"
+                  target-field-name: "transactionCodeDesc"
+                  lookup-type: "tx"
+                  language: "EN"
+                  fixed: false
+                  enum-name: ~
+                - parent-object-path: "/transactionLogInquiryResponseDetails/transactionLogList"
+                  field-name: "rejectionReason"
+                  target-field-name: "rejectionReasonDesc"
+                  lookup-type: "rj"
+                  language: "EN"
+                  fixed: false
+                  enum-name: ~
+                - parent-object-path: "/transactionLogInquiryResponseDetails/transactionLogList"
+                  field-name: "actionCode"
+                  target-field-name: "actionCodeDesc"
+                  lookup-type: ~
+                  language: ~
+                  fixed: true
+                  enum-name: actionCodes
+                - parent-object-path: "/transactionLogInquiryResponseDetails/transactionLogList"
+                  field-name: "claimStatus"
+                  target-field-name: "claimStatusDesc"
+                  lookup-type: ~
+                  language: ~
+                  fixed: true
+                  enum-name: claimStatus
+                - parent-object-path: "/transactionLogInquiryResponseDetails/transactionLogList"
+                  field-name: "messageClass"
+                  target-field-name: "messageClassDesc"
+                  lookup-type: ~
+                  language: ~
+                  fixed: true
+                  enum-name: messageClass
+
+        ldap-microgateway:
+          application-version: '@project.version@'
+          host: http://ldap-microgateway.dev.apps.openshift.dev.mdi
+          base-uri: /mgw
+          api:
+            profile-uri: /v1/ldap/profile
+            profile-is-exist-uri: /v1/ldap/profile/existence/check
+            profile-by-client-id: /v1/ldap/user-name/recover
+            profile-by-username: /v1/ldap/profile/user-name/recover
+            profile-by-customer-id: /v1/ldap/profile/customer-id/recover
+            update-profile-client-id-by-username: /v1/ldap/profile/client-id
+            remove-profile-client-id-for-other-username: /v1/ldap/profile/client-id/remove
+            check-profile-lock: /v1/ldap/profile/lock/check
+          backend:
+            host: ldaps://VSWSITLDAP01:636
+            config:
+              ssl: true
+              object-class: InetOrgPerson
+              keystore-path: /tmp
+              member-attribute: member
+              object-class-attribute: objectclass
+
+        directory-microgateway:
+          application-version: '@project.version@'
+          host: http://directory-microgateway.dev.apps.openshift.dev.mdi
+          base-uri: /mgw
+          api:
+            profile-by-username-uri: /v1/directory/profile/username
+            create-profile-uri: /v1/directory/profile
+            validate-username-uri: /v1/directory/profile/validate/username
+            validate-password-uri: /v1/directory/profile/validate/password
+            change-password-uri: /v1/directory/profile/password/change
+            reset-password-uri: /v1/directory/profile/password/reset
+            update-client-id-by-username: /v1/directory/profile/clientid
+            get-profile-by-client-id: /v1/directory/profile/recover/clientid
+            get-profile-by-customer-id: /v1/directory/profile/recover/customerid
+          backend:
+            host: https://directory.ping.dev.mdi:8443
+            base-uri: /directory/v1
+            api:
+              profile-by-username-uri: '/cn='
+              get-current-user: /me
+              search-user-profile-uri: '/{groupPath}/subtree/search'
+            config:
+              directory-username-pre-fix-url: 'cn='
+              directory-cn-post-fix-url: ',ou=people,dc=dev,dc=mdi'
+              group-path: ou=people,dc=dev,dc=mdi
+              profile-controls:
+                - oid: 1.3.6.1.4.1.30221.2.5.28
+                  control-name: Assured Replication Request Control
+                  criticality: false
+                  value-json:
+                    send-response-immediately: true
+                    minimum-local-level: processed-all-servers
+                    minimum-remote-level: processed-all-remote-servers
+                    timeout-millis: 1000
+              object-class:
+                - top
+                - person
+                - organizationalPerson
+                - MDICustomer
+
+        visa-microgateway:
+          application-version: '@project.version@'
+          host: http://visa-microgateway.dev.apps.openshift.dev.mdi
+          base-uri: /mgw
+          api:
+            make-pull-fund-transaction-uri: /v1/visa/transactions/pull
+            make-reverse-pull-fund-transaction-uri: /v1/visa/transactions/reverse
+            validate-card-uri: /v1/visa/cards/validate
+          backend:
+            host: https://cert.api.visa.com
+            api:
+              make-pull-fund-transaction-uri: /visadirect/fundstransfer/v1/pullfundstransactions
+              make-reverse-pull-fund-transaction-uri: /visadirect/v1/adjustment
+              validate-card-uri: /pav/v1/cardvalidation
+        otp-generation-microgateway:
+          application-version: '@project.version@'
+          host: http://otp-generation-microgateway.dev.apps.openshift.dev.mdi
+          base-uri: /mgw
+          api:
+            generate-otp-uri: /v1/otp/generate
+            verify-otp-uri: /v1/otp/verify
+          config:
+            otp-digits-length: 6
+            otp-life-period: 60
+
+        payment-gateway-microgateway:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          host: http://payment-gateway-microgateway.dev.apps.openshift.dev.mdi
+          #          host: http://localhost:7084
+          api:
+            init-authentication: /v1/payment-gateway/init-authentication
+            payment: /v1/payment-gateway/payment
+            payment-basicAuth-uri: /v1/system/secure/payment-gateway/payment
+            refund: /v1/payment-gateway/refund
+            refund-basicAuth-uri: /v1/system/secure/payment-gateway/refund
+            void-basicAuth-uri: /v1/system/secure/payment-gateway/void
+            void: /v1/payment-gateway/void
+            transaction-status: /v1/payment-gateway/transaction-status
+            authentication-payer: /v1/payment-gateway/authentication-payer
+          banquemisr-gateway-mastercard-url: https://banquemisr.gateway.mastercard.com/api/rest/version/60
+          banquemisr-gateway-API-format: /merchant/%s/order/%s/transaction/%s
+
+        fawry-billers-microgateway:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          host: http://fawry-billers-microgateway.dev.apps.openshift.dev.mdi
+          #          host: http://localhost:7086
+          api:
+            biller-inquiry: /v1/biller/aggregator/billerInquiry
+            secure-biller-inquiry: /v1/system/secure/biller/aggregator/billerInquiry
+            bill-inquiry: /v1/biller/aggregator/billInquiry
+            bill-payment: /v1/biller/aggregator/billPayment
+            bill-payment-base-auth-url: /v1/system/secure/biller/aggregator/billPayment
+          config:
+            reciver: MDIEEGCXXXX
+            sender: BIC_INT
+            biller-inq-msgCode: BillerInqRq
+            bill-inq-msgCode: BillInqRq
+            add-payment-msgCode: PmtAddRq
+            version: V1.0
+            signon-pswd:
+            suppress-echo:
+            originator-code: MDIEEGCXXXX
+            terminal-id: 1234
+            delivery-method: INT
+            bank-id: MDIEEGCXXXX
+          backend:
+            host: http://10.10.90.65:9080/CoreWeb/ApplicationBusinessFacadeService
+          velocity-templates-paths:
+            biller-inquiry: billerInquiry.vm
+            bill-inquiry: billInquiry.vm
+            bill-payment: billPayment.vm
+        statement-generator:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          host: http://statement-generator.dev.apps.openshift.dev.mdi
+          api:
+            generate-account-statement-url: /v1/statements/account/statement/generate
+            get-transaction-receipt-uri: /v1/statements/money-transfer
+            get-receipt-uri: /v1/statements/receipt
+          config:
+            statement-file-name: 'E_statement'
+
+        connect-kafka-mgw:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          host: http://connect-kafka-mgw.dev.apps.openshift.dev.mdi
+          description: "used for CRM only"
+          api:
+            memory-status: /v1/memory-status
+            transform: /v1/transform
+          backend:
+            bootstrap-servers: vsrsitcnfkf01.dev.mdi:9092,vsrsitcnfkf02.dev.mdi:9092,vsrsitcnfkf03.dev.mdi:9092
+            max-consumer-threads: 3
+            poll-timeout: 50
+            auto-offset-reset: latest
+          #host: localhost:7020
+          config:
+            topic:
+              input:
+                crm:
+                  name: crm_msdynamics_365_dev_customer_info
+                  group-id: crm-dev
+              output:
+                batch-size: 100
+                linger-ms: 300
+                crm:
+                  name: MDI-MENIGA-USERS
+              log:
+                batch-size: 100
+                linger-ms: 2000
+                name: splunk_logger_connect_kafka
+                #level: possible values : NONE | INFO | DEBUG
+                level: DEBUG
+
+        connect-kafka-cbs-mgw:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          host: http://connect-kafka-cbs-mgw.dev.apps.openshift.dev.mdi
+          description: "used for CBS only"
+          api:
+            memory-status: /v1/memory-status
+            transform: /v1/transform
+          backend:
+            bootstrap-servers: vsrsitcnfkf01.dev.mdi:9092,vsrsitcnfkf02.dev.mdi:9092,vsrsitcnfkf03.dev.mdi:9092
+            schema-registry-url: http://vsrdevnginx01.dev.mdi/schemas/ids/
+            cache:
+              ttl: 240
+            max-consumer-threads: 3
+            poll-timeout: 50
+            auto-offset-reset: latest
+          config:
+            topic:
+              input:
+                cbs:
+                  name: core_banking_des_sit_table-update
+                  group-id: cbs-dev
+                cbs-if:
+                  name: core_banking_des_sit_if
+                  group-id: cbs-crm-dev
+              output:
+                batch-size: 100
+                linger-ms: 300
+                cbs-acc:
+                  name: MDI-MENIGA-ACCOUNTS
+                cbs-trx:
+                  name: MDI-MENIGA-TRANSACTIONS
+                crm:
+                  name: T24-CRM-360
+              log:
+                batch-size: 20
+                linger-ms: 20
+                name: splunk_logger_connect_kafka
+                #level: possible values : NONE | INFO | DEBUG
+                level: DEBUG
+            rules:
+              accounts:
+                categories: 1001,1002,1003,1004,6001,6002,1901,1902,1903,1904
+              transactions:
+                categories: 1001,1002,1003,1004,6001,6002,1901,1902,1903,1904
+                atm-trx-codes: 140,141,144,145,146,147,157
+              crm:
+                account-posting-updates: AccountsV20G1P1-AccountPostingUpdates, AccountsV20G1P2-AccountPostingUpdates, AccountsV20G1P3-AccountPostingUpdates, AccountsV20G1P4-AccountPostingUpdates, AccountsV20G2P1-AccountPostingUpdates, AccountsV20G2P2-AccountPostingUpdates, AccountsV20G3P1-AccountPostingUpdates, AccountsV20G3P2-AccountPostingUpdates, AccountsV20G3P3-AccountPostingUpdates, AccountsV20G3P4-AccountPostingUpdates
+                closure-in-case-dormant: AccountsV27G1P1-ClosureInCaseDormant, AccountsV27G1P2-ClosureInCaseDormant, AccountsV27G1P3-ClosureInCaseDormant, AccountsV27G1P4-ClosureInCaseDormant, AccountsV27G2P1-ClosureInCaseDormant, AccountsV27G2P2-ClosureInCaseDormant, AccountsV27G3P1-ClosureInCaseDormant, AccountsV27G3P2-ClosureInCaseDormant, AccountsV27G3P3-ClosureInCaseDormant, AccountsV27G3P4-ClosureInCaseDormant
+                change-product: AccountsV34G1P1-ChangeProduct, AccountsV34G1P2-ChangeProduct, AccountsV34G1P3-ChangeProduct, AccountsV34G1P4-ChangeProduct, AccountsV34G2P1-ChangeProduct, AccountsV34G2P2-ChangeProduct, AccountsV34G3P1-ChangeProduct, AccountsV34G3P2-ChangeProduct, AccountsV34G3P3-ChangeProduct, AccountsV34G3P4-ChangeProduct, DepositsV34G1P1-ChangeProduct, DepositsV34G1P10-ChangeProduct, DepositsV34G1P2-ChangeProduct, DepositsV34G1P3-ChangeProduct, DepositsV34G1P4-ChangeProduct, DepositsV34G1P5-ChangeProduct, DepositsV34G1P6-ChangeProduct, DepositsV34G1P7-ChangeProduct, DepositsV34G1P8-ChangeProduct, DepositsV34G1P9-ChangeProduct, DepositsV34G2P1-ChangeProduct, DepositsV34G2P10-ChangeProduct, DepositsV34G2P11-ChangeProduct, DepositsV34G2P12-ChangeProduct, DepositsV34G2P2-ChangeProduct, DepositsV34G2P3-ChangeProduct, DepositsV34G2P4-ChangeProduct, DepositsV34G2P5-ChangeProduct, DepositsV34G2P6-ChangeProduct, DepositsV34G2P7-ChangeProduct, DepositsV34G2P8-ChangeProduct, DepositsV34G2P9-ChangeProduct, DepositsV34G3P1-ChangeProduct, DepositsV34G3P2-ChangeProduct, DepositsV34G3P3-ChangeProduct, DepositsV34G3P4-ChangeProduct, LendingV34G1P1-ChangeProduct, LendingV34G1P2-ChangeProduct, LendingV34G1P3-ChangeProduct
+                posting-restrict: CustomerV21-PostingRestrict
+        connect-kafka-fawry-microgateway:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          host: http://connect-kafka-fawry-microgateway.dev.apps.openshift.dev.mdi
+          description: "used for Fawry only"
+          api:
+            memory-status: /v1/memory-status
+            transform: /v1/transform
+          backend:
+            bootstrap-servers: vsrsitcnfkf01.dev.mdi:9092,vsrsitcnfkf02.dev.mdi:9092,vsrsitcnfkf03.dev.mdi:9092
+            max-consumer-threads: 3
+            poll-timeout: 50
+            auto-offset-reset: latest
+          #host: localhost:7020
+          config:
+            topic:
+              input:
+                fawry:
+                  name: pfm_fawry_dev_events
+                  group-id: fawry-dev
+              output:
+                batch-size: 100
+                linger-ms: 300
+                fawry:
+                  name: MDI-MENIGA-TRANSACTIONS
+              log:
+                batch-size: 100
+                linger-ms: 2000
+                name: splunk_logger_connect_kafka
+                #level: possible values : NONE | INFO | DEBUG
+                level: DEBUG
+        connect-kafka-cms-mgw:
+          application-version: '@project.version@'
+          base-uri: /mgw
+          host: http://connect-kafka-cms-mgw.dev.apps.openshift.dev.mdi
+          description: "used for CMS only"
+          api:
+            memory-status: /v1/memory-status
+            transform: /v1/transform
+          backend:
+            bootstrap-servers: vsrsitcnfkf01.dev.mdi:9092,vsrsitcnfkf02.dev.mdi:9092,vsrsitcnfkf03.dev.mdi:9092
+            cache:
+              ttl: 240
+            max-consumer-threads: 3
+            poll-timeout: 50
+            auto-offset-reset: latest
+          config:
+            topic:
+              input:
+                cms:
+                  name: Integration_sit_cortex_system_notification
+                  group-id: cms-dev
+              output:
+                batch-size: 100
+                linger-ms: 300
+                cms-acc:
+                  name: MDI-MENIGA-ACCOUNTS
+                cms-trx:
+                  name: MDI-MENIGA-TRANSACTIONS
+              log:
+                batch-size: 20
+                linger-ms: 20
+                name: splunk_logger_connect_kafka
+                #level: possible values : NONE | INFO | DEBUG
+                level: DEBUG
+        camel:
+          masria:
+            masria-host: 10.10.10.5:22
+            masria-destination-file-path: /ToMasria
+            masria-source-file-path: /FromMasria
+            masria-backup-file-path: /ToMasria/Done
+            key-file-path: /MDP_Key.pem
+          cortex:
+            cortex-host: 10.10.90.71
+            file-pattern: cms_embosser.*.gz.PGP
+            cortex-source-file-path: /../../ctxdata/mdi/out/emboss/card
+            cortex-backup-file-path: /../../ctxdata/mdi/out/emboss/card/Done
+            cortex-destination-file-path: /../../ctxdata/mdi/out/emboss/card/fromMasria
+
+
+      domain:
+        ecards-managment:
+          host: http://e-cards.dev.apps.openshift.dev.mdi
+          application-version: '@project.version@'
+          base-uri: /domain
+          api:
+            get-token-uri: /v1/ecards/token
+            start-sdk-session-uri: /api/v1/sdk-session/start/
+            start-bundle-sdk-session-uri: /api/v1/bundle/start-session/
+            perform-ocr-sdk-uri: &perform-ocr-sdk-uri /api/v1/ocr/
+            combine-ocr-sdk-uri: /api/v1/transaction/combine-ocr/
+            liveness-detection-sdk-uri: /api/v1/liveness/register/
+            face-match-sdk-uri: /api/v1/face/match/
+            start-watermark-sdk-uri: /api/v1.2/watermark/start/
+            predict-watermark-sdk-uri: /api/v1.2/watermark/predict/
+
+        deposit-managment:
+          host: http://deposit-management.dev.apps.openshift.dev.mdi
+          application-version: '@project.version@'
+          base-uri: /domain
+          api:
+            get-deposits-by-customer-id: /v1/deposits/customer/deposits
+            get-deposits-details-with-path-variable: /v1/deposits/customer/deposits/{arrangementId}
+            get-deposits-details-without-path-variable: /v1/deposits/customer/deposits/
+            retrieve-accounts-transactions: /v1/deposits/customer/deposit/{accountId}/transactions
+            check-deposit-eligiblity: /v1/deposits/customer/deposit/open/eligibility
+            term-deposit: /v1/deposits/customer/termDeposits
+            get-payment-schedule: /v1/deposits/customer/deposit/{arrangementId}/payment-schedules
+
+
+        lookup-management:
+          application-version: '@project.version@'
+          base-uri: /domain
+          host: http://lookup-management.dev.apps.openshift.dev.mdi
+          api:
+            load-card-validity: /v1/lookup/card/validity
+            load-bank-locations: /v1/lookup/bank/locations
+            load-annual-income-list-uri: /v1/lookup/customer-profile/annual-income
+            load-business-activities-list-uri: /v1/lookup/customer-profile/business-activities
+            load-config-uri: /v1/lookup/contents/config/load
+            load-tc-uri: /v1/lookup/contents/tc/load
+            get-card-closure-reasons-uri: /v1/lookup/card/card-closure-reasons
+            get-all-banks: /v1/lookup/banks
+        customer-management:
+          application-version: '@project.version@'
+          base-uri: /domain
+          host: http://customer-management.dev.apps.openshift.dev.mdi
+          api:
+            update-guest-mobile-number-uri: /v1/customers/guest/mobile-number
+            account-number-authenticate-uri: /v1/customers/customer/accountnumber/authenticate
+            retrieve-client-id-by-mobile-number-uri: /v1/customers/{mobileNumber}/customer/client-id
+            retrieve-client-id-by-mobile-number-uri-without-path-variable: /v1/customers/customer/client-id
+            send-notification-locked-app-token-uri: /v1/customers/customr/notification/locked-app-token
+            retrieve-login-history-uri: /v1/customers/customer/login/history
+            add-login-history: /v1/customers/customer/login/history
+            create-prospect-customer-uri: /v1/customers
+            customers-registration-uri: &customers-registration-uri /v1/customers/register
+            check-customer-mobile-number-existence-uri: /v1/customers/mobile-number/existence/check
+            retrieve-customer-by-mobile-number-with-path-variable: /v1/customers/mobile-number/{mobileNumber}
+            retrieve-customer-by-mobile-number-without-path-variable: /v1/customers/mobile-number
+            check-customer-status-uri: /v1/customers/customer/status/check
+            mobile-number-existence-validation-uri-without-path-variable-to-validate: /v1/customers/existance/mobile-number
+            mobile-number-existence-validation-uri-variable: /v1/customers/existance/mobile-number/{mobileNumber}
+            im-username-existence-full-path-variable: /v1/customers/existence/username/{username}/mobile-number/{mobileNumber}
+            im-username-existence-mobile-path-variable: /v1/customers/existence/mobile-number/{mobileNumber}
+            im-username-existence-username-path-variable: /v1/customers/existence/username/{username}
+            password-validation: /v1/customers/password/validate
+            send-otp: /v1/customers/mobile-number/authenticate
+            send-email-otp: /v1/customers/customer/email/authenticate
+            retrieve-username: /v1/customers/user-name/recover
+            onboarded: /v1/customers/onboarded
+            accept-terms-and-conditions: /v1/customers/terms-and-conditions/accept
+            health-base-url: /v1/customers/mgmt/health
+            retrieve-customer-by-customer-id: /v1/customers/customer
+            professions-list: /v1/customers/professions
+            set-preferred-language: /v1/customers/customer/preferred-langage
+            communication-address-uri: /v1/customers/communication-address
+            delete-communication-address-uri: /v1/customers/communication-address
+            marital-status-uri: /v1/customers/marital-status
+            load-communication-address-uri: /v1/customers/customer/communication-address
+            set-marital-status-uri: /v1/customers/customer/marital-status
+            income-sources-list: /v1/customers/income-sources
+            unlock-user-with-account-number: /v1/customers/customer/account-number/unlock
+            unlock-user-with-national-id: /v1/customers/customer/national-id/unlock
+            retrieve-username-using-national-id: /v1/customers/customer/national-id/recover
+            retrieve-username-using-account-number: /v1/customers/customer/account-number/recover
+            client-id-authenticate-uri: /v1/customers/client-id/authenticate
+            customer-id-authenticate-uri: /v1/customers/customer-id/authenticate
+            reset-password-using-national-id-uri: /v1/customers/customer/national-id/reset-password
+            change-user-password-uri: /v1/customers/customer/password/change
+            reset-user-password-uri: /v1/customers/customer/account-number/reset-password
+            validate-otp-token-uri: /v1/customers/customer/token/validate
+            add-beneficiary-payment-information-uri: /v1/customers/customer/beneficiary-payment-info
+            delete-beneficiary-uri: /v1/customers/customer/beneficiary/{beneficiaryId}
+            delete-beneficiary-payment-information-uri: /v1/customers/customer/beneficiary-payment-info/{beneficiaryPaymentInformationId}
+            add-beneficiary-uri: /v1/customers/customer/beneficiary
+            load-beneficiary-list-uri: /v1/customers/customer/beneficiaries
+            update-beneficiary-payment-information-uri: /v1/customers/customer/beneficiary-payment-info/{beneficiaryPaymentInfoId}
+            delete-additional-mobile-number-uri: /v1/customers/customer/additional-mobile-number
+            automation-customer-accounts-uri: /v1/customers/automation/customer/allaccounts
+            automation-approve-service-request-uri: /v1/customers/automation/approve/service-request
+            automation-reject-service-request-uri: /v1/customers/automation/reject/service-request
+            retrieve-user-profile-uri: /v1/customers/customer/profile
+            set-banking-profile-info-uri: /v1/customers/customer/banking-profile
+            set-email-uri: /v1/customers/customer/email
+            mobile-number-non-existence-validation-uri-variable: /v1/customers/non-existence/mobile-number/{mobileNumber}
+            mobile-number-non-existence-validation-without-path-variable-uri: /v1/customers/non-existence/mobile-number
+            update-default-mobile-number-uri: /v1/customers/customer/mobile-number
+            set-additional-mobile-number-uri: /v1/customers/customer/additional-mobile-number
+            set-additional-mobile-number-as-default-uri: /v1/customers/customer/additional-mobile-number/promote
+            create-fatca-customer-uri: /v1/customers/customer/fatca
+            verify-customer-email: /v1/customers/customer/email/verify
+            unlock-user-with-customer-id: /v1/customers/customer/unlock
+            update-customer-uri: /v1/customers/customer/accounts/cards/customer-data/update-customer-data
+            recover-username-using-card-number-and-pin-uri: /v1/customers/customer/card-number/recover
+            recover-password-using-card-number-and-pin-uri: /v1/customers/customer/card-number/reset-password
+            unlock-account-using-card-number-and-pin-uri: /v1/customers/customer/card-number/unlock
+            national-id-authenticate-uri: /v1/customers/customer/national-id/authenticate
+            card-number-authenticate-uri: /v1/customers/customer/card-number/authenticate
+            load-profession-types-list-uri: /v1/customers/profession-types
+            check-profile-lock: /v1/customers/customer/lock/check
+          config:
+            kafka:
+              bootstrap-address: "vsrsitcnfkf01.dev.mdi:9092,vsrsitcnfkf02.dev.mdi:9092,vsrsitcnfkf03.dev.mdi:9092"
+              topic: "integration_dev_crm_profile_temp"
+              group: "myGroup"
+              sleep-time: 1000
+              number-of-trials: 3
+          velocity-templates-path:
+
+
+        document-management:
+          application-version: '@project.version@'
+          base-uri: /domain
+          host: http://document-management.dev.apps.openshift.dev.mdi
+          api:
+            upload-document-uri: /v1/documents/customer/document/upload
+            delete-document-uri: /v1/documents/customer/document/delete
+            delete-documents-uri: /v1/documents/customer/delete/document-type/{documentType}
+            delete-documents-uri-without-path-variable: /v1/documents/customer/delete/document-type/
+            load-documents-uri: /v1/documents/customer/document-type/{documentType}
+            load-documents-uri-without-path-variable: /v1/documents/customer/document-type/
+            download-document-uri: /v1/documents/customer/document/download
+            retreive-national-id-base64-uri: /v1/documents/customer/document/national-id
+
+          kyc-document-library-name: lead
+          service-request-document-library-name: atos_servicerequest
+          document-libraries-definitions:
+            - name: atos_servicerequest
+              title: Service Request
+              relative-path: /sites/crm/atos_servicerequest
+            - name: lead
+              title: Prospect
+              relative-path: /sites/crm/lead
+          customer-documents:
+            types:
+              - document-type: KYC_NATIONAL_ID
+                meta-data-id: 1
+                service-request-subject: ~
+                document-library-name: lead
+              - document-type: KYC_PROFESSION
+                meta-data-id: 1
+                service-request-subject: PROFESSION
+                document-library-name: atos_servicerequest
+              - document-type: KYC_ADDRESS
+                meta-data-id: 1
+                service-request-subject: ADDRESS
+                document-library-name: atos_servicerequest
+              - document-type: KYC_FATCA_W-9
+                meta-data-id: 1
+                service-request-subject: FATCA
+                document-library-name: atos_servicerequest
+              - document-type: KYC_FATCA_US_CITIZENSHIP
+                meta-data-id: 1
+                service-request-subject: FATCA
+                document-library-name: atos_servicerequest
+              - document-type: KYC_FATCA_US_PURPOSE_EDUCATION
+                meta-data-id: 1
+                service-request-subject: FATCA
+                document-library-name: atos_servicerequest
+              - document-type: KYC_FATCA_US_PURPOSE_MEDICAL
+                meta-data-id: 1
+                service-request-subject: FATCA
+                document-library-name: atos_servicerequest
+              - document-type: KYC_FATCA_US_PURPOSE_DIPLOMATIC
+                meta-data-id: 1
+                service-request-subject: FATCA
+                document-library-name: atos_servicerequest
+              - document-type: KYC_FATCA_US_PURPOSE_OTHER
+                meta-data-id: 1
+                service-request-subject: FATCA
+                document-library-name: atos_servicerequest
+              - document-type: KYC_FATCA_GREEN_CARD
+                meta-data-id: 1
+                service-request-subject: FATCA
+                document-library-name: atos_servicerequest
+              - document-type: KYC_FATCA_RENUNCIATION
+                meta-data-id: 1
+                service-request-subject: FATCA
+                document-library-name: atos_servicerequest
+              - document-type: STAMPED_ACCOUNT_STATEMENT
+                meta-data-id: 68
+                service-request-subject: ~
+                document-library-name: atos_servicerequest
+              - document-type: E_ACCOUNT_STATEMENT
+                meta-data-id: 69
+                service-request-subject: ~
+                document-library-name: lead
+              - document-type: CUSTOMER_SELFIE
+                meta-data-id: 70
+                service-request-subject: ~
+                document-library-name: lead
+
+        account-management:
+          application-version: '@project.version@'
+          base-uri: /domain
+          host: http://account-management.dev.apps.openshift.dev.mdi
+          api:
+            get-account-locked-amount: /v1/accounts/customer/{accountId}/locked-amounts
+            generate-statement-eligibility: /v1/accounts/account/statement/eligibility/check
+            generate-e-statement-eligibility: /v1/accounts/account/e-statement/eligibility/check
+            load_account_opening_purpose: /v1/accounts/opening-purposes
+            validate-account-number-against-id-uri: /v1/account/existance/account-number/{accountNumber}
+            validate-account-number-against-id-invalid-uri: /v1/account/existance/account-number
+            check-account-existance-uri: /v1/accounts/account/exist
+            set-account-alias-uri: /v1/accounts/account/alias/update
+            check-account-identifier-uri: /v1/account/identifier/check
+            external-transfer: /v1/accounts/external/transfer
+            internal-transfer: /v1/accounts/internal/transfer
+            card-transfer: /v1/accounts/card/transfer
+            donation-internal-payment: /v1/accounts/donation/internal/payment
+            bill-payments-transfer: /v1/accounts/bill/payments/transfer
+            swift-outward-internal: /v1/accounts/swift/outward/internal
+            swift-outward-external: /v1/accounts/swift/outward/external
+            check-transfer-eligibility-uri: /v1/accounts/transfer/eligibility/check
+            check-source-transfer-eligibility-uri: /v1/accounts/transfer/source/eligibility/check
+            check-destination-transfer-eligibility-uri: /v1/accounts/transfer/destination/eligibility/check
+            check-account-block-uri: /v1/accounts/account/blocking/check
+            check-account-block-param-uri: /v1/accounts/account/blocking/check/param
+            check-card-block-uri: /v1/accounts/card/blocking/check
+            load-account-status-with-path-variable: /v1/accounts/status/{postingRestrictId}
+            load-account-status-without-path-variable: /v1/accounts/status/
+            load-closed-account-uri: /v1/accounts/customer/accounts/closed
+            retreive-account-transaction-details: v1/accounts/{accountId}/transactions/details
+            retrieve-accounts-transactions: /v1/accounts/{accountId}/transactions
+            retreive-posting-restrictions: /v1/accounts/posting-restrictions
+            reverse-transaction: /v1/accounts/customer/account/transactions/{transactionReference}/reverse
+            create-current-account-uri: /v1/accounts/current-account
+            validate-account-closure-uri: /v1/accounts/customer/account/closure/validate
+            close-account-uri: /v1/accounts/customer/account/close
+            simulate-account-closure-uri: /v1/accounts/customer/accounts/{accountId}/closure/simulation
+            get-pay-offs-uri: /v1/accounts/customer/accounts/{arrangementId}/payoff
+            check-merchant-transfer-eligibility-uri: /v1/accounts/transfer/merchant/eligibility/check
+            check-customer-account-posting-restriction-uri: /v1/accounts/customer/account/{accountId}/posting-restrictions
+            capture-card-statement-print-bill-uri: /v1/accounts/account/card-statement-print-bill/capture
+            capture-card-issue-bill-uri: /v1/accounts/account/card-issuance-bill/capture
+          config:
+            bank-info:
+              bank-code: ONEXXX
+              bank-name-ar: بنك مصر الرقمي
+              bank-name-en: Digital Bank 1
+              bank-short-name: Digital Bank 1
+              bic: BMISEGC0X
+              iso-code: 818
+            transfer-money:
+              payment-currency-id: EGP
+            payment-order-product-id:
+              internal: ACTRF
+              external: EGACHCT
+              card-transfer: CCARDS
+              donation-payments: CHARITY
+              bill-payments: BILLPAY
+              swift-outward-internal: EGRTGS
+              swift-outward-external: INATIONAL
+            capture-bill:
+              product-id: MDI.CURRENT.DEFAULT
+              field-name: FIXED.AMOUNT
+              card-statement-print-bill:
+                activity-id: ACCOUNTS-CAP.CARDSTMTPRINT-ARRANGEMENT
+                property-id: CARDSTMTPRINT
+              card-issue-bill:
+                activity-id: ACCOUNTS-CAP.CARDISSUE-ARRANGEMENT
+                property-id: CARDISSUE
+            posting-restrication:
+              inactive:
+                - "80"
+                - "90"
+            e-statement-posting-restrictions:
+              14: CBE
+              15: SANCTIONED_CUSTOMER
+              9999: FREEZING_EMLCU
+            posting-restrication-list:
+              1: POST_NO_DEBITS
+              2: POST_NO_CREDITS
+              3: POST_NO_ENTRIES
+              4: REFER_CREDITS
+              5: REFER_DEBITS
+              6: REFER_ALL
+              12: CUSTOMER_DECEASED
+              13: KYC_UPDATE
+              14: CBE
+              15: SANCTIONED_CUSTOMER
+              16: INACTIVE
+              80: PENDING_CLOSURE
+              90: AUTOMATIC_CLOSING
+
+        card-management:
+          application-version: '@project.version@'
+          base-uri: /domain
+          host: http://card-management.dev.apps.openshift.dev.mdi
+          api:
+            validate-card-pin-uri: /v1/cards/card/pin/validate
+            retrieve-card-pin-uri: /v1/cards/card/pin/retrieve
+            validate-card-pan-uri: /v1/cards/card/pan/validate
+            change-card-pin-uri: /v1/cards/card/pin/change
+            set-card-pin-uri: /v1/cards/card/pin/set
+            close-card-uri: /v1/cards/customer/card/close
+            replace-card-uri: /v1/cards/customer/card/replace
+            validate-card-credentials-uri: /v1/cards/validate-card
+            get-linked-external-card-uri: /v1/cards/customer/external-cards
+            update-card-embossing-name: /v1/cards/card/embossing-name
+            update-card-auth-param: /v1/cards/card/param/ecommerce
+            move-card-to-pending-batch-url: /v1/card/order
+            load-prepaid-credit-account-url: /v1/cards/customer/prepaid-card/credit
+            load-prepaid-debit-account-url: /v1/cards/customer/prepaid-card/debit
+            account-unload-url: /v1/cards/customer/prepaid-card/clear
+            load-card-status-without-path-variable: /v1/cards/status
+            load-card-status-with-path-variable: /v1/cards/status/{cardStatus}
+            add-external-bank-card-url: /v1/cards/customer/external-card
+            get-customer-default-card-url: /v1/cards/card/default
+            get-external-bank-card-url: /v1/cards/customer/external-card/inquiry
+            edit-external-bank-card-url: /v1/cards/customer/external-card/{cardSupportingDocumentId}
+            edit-external-bank-card-without-path-variable: /v1/cards/customer/external-card
+            delete-external-bank-card-url: /v1/cards/customer/external-card/{cardSupportingDocumentId}
+            delete-external-bank-card-without-bath-variable-url: /v1/cards/customer/external-card
+            issue-card: /v1/cards/customer/card/issue/
+            open-online-card-eligibility-uri: /v1/cards/online-card/eligibility/check
+            open-physical-card-eligibility-uri: /v1/cards/physical-card/eligibility/check
+            make-pull-fund-transaction-uri: /v1/cards/visa/transactions/pull
+            make-reverse-pull-fund-transaction-uri: /v1/cards/visa/transactions/reverse
+            validate-external-card-uri: /v1/cards/external-card/validate
+            reset-pin-trial-card-uri: v1/cards/customer/card/pin-tries/reset
+            activate-card-uri: /v1/cards/customer/card/activate
+            activate-card-with-otp-uri: /v1/cards/customer/card/activate/otp
+            manage-linkage-accounts-uri: /v1/cards/customer/card/account/linkage/manage
+            manage-ecommerce-enable-card-uri: /v1/cards/customer/card/ecommerce/manage
+            update-card-status-url: /v1/cards/customer/card/block
+            set-card-limit-url: /v1/cards/customer/card/limit/manage
+            get-card-restrictions-url: /v1/cards/customer/card/restrictions/retrieve
+            manage-card-restrictions-url: /v1/cards/customer/card/restrictions/manage
+            update-card-embossing-related-info: /v1/cards/card/embossing-info
+            deactivate-physical-card-url: /v1/cards/customer/card/physical/deactivate
+            get-card-transactions: /v1/cards/card/transactions
+            block-customer-all-cards-url: /v1/cards/customer/cards/block
+            block-customer-account-card-url: /v1/customers/customer/accounts/cards/block
+            check-active-vcn-existence-customer-url: /v1/cards/customer/cards/active/pre-paid/existence/check
+            check-replace-physical-card-eligibility: /v1/cards/physical-card/replace/eligibility/check
+            activate-physical-card-uri: /v1/cards/customer/physical-card/activate
+            validate-physical-card-qr-code-uri: /v1/cards/customer/physical-card/validate/qr
+            activate-physical-card-eligibility-uri: /v1/cards/physical-card/activate/eligibility/check
+            get-card-risk-details: /v1/cards/customer/card/risk
+            inquire-customer-prepaid-account-transactions-uri: /v1/cards/customer/prepaid-transactions/retrieve
+            add-frozen-customer-uri: /v1/cards/customer/frozen/add
+            remove-frozen-customer-uri: /v1/cards/customer/frozen/remove
+          config:
+            address-max-length: 64
+            card-status:
+              active:
+                "00": NORMAL
+                "01": PIN_TRIES_EXCEEDED
+                "02": NOT_YET_ISSUED
+                "10": VIRTUAL_ACTIVE
+                "20": PENDING_ISSUANCE
+                "21": CARD_EXTRACTED
+                "22": EXTRACTION_FAILED
+                "23": FAILED_PRINTING_BULK
+                "24": FAILED_PRINTING_INST
+                "30": PENDING_ACTIVATION
+
+              inactive:
+                "03": CARD_EXPIRED
+                "04": LOST
+                "05": STOLEN
+                "06": CUSTOMER_CLOSE
+                "07": BANK_CANCELLED
+                "08": FRAUD
+                "09": DAMAGED
+                "50": SAFE_BLOCK
+                "51": TEMPORARY_BLOCK
+            visa-api-parameters:
+              acquirer-country-code: 818
+              acquiring-bin: 408999
+              sender-currency-code: EGP
+              business-application-id: AA
+              visa-merchant-identifier: 73625198
+              transaction-type-code: 22
+              message-reason-code: 2150
+              cps-authorization-characteristics-indicator: Y
+              card-acceptor:
+                id-code: ABCD1234ABCD123
+                name: Visa Inc. USA-Foster City
+                terminal-id: ABCD1234
+                address:
+                  country: EG
+                  zip-code: 94404
+                  state: CA
+              point-of-service-data:
+                pan-entry-mode: 01
+                pos-condition-code: 00
+              address-verification-results:
+                street: 801 Metro Center Blv
+                postal-code: 94404
+            account-types-mapping:
+              - core-banking-account-type: MDI.CURRENT.ACCOUNTS
+                cortex-account-type: 00
+                default-account: true
+              - core-banking-account-type: MDI.SAVINGS.ACCOUNTS
+                cortex-account-type: 10
+                default-account: false
+
+        service-request-management:
+          application-version: '@project.version@'
+          base-uri: /domain
+          api:
+            create-service-request-uri: /v1/service-requerst/create-service-request
+            resume-service-request-uri: /v1/service-requerst/resume-service-request
+            retrieve-customer-service-request-uri: /v1/service-request/customers/customer/service-requests
+          kafka:
+            bootstrap-address: "vsrsitcnfkf01.dev.mdi:9092,vsrsitcnfkf02.dev.mdi:9092,vsrsitcnfkf03.dev.mdi:9092"
+            topic: "Integration_dev_crm_sr"
+            group: "myGroup"
+
+        product-management:
+          application-version: '@project.version@'
+          base-uri: /domain
+          host: http://product-management.dev.apps.openshift.dev.mdi
+          api:
+            create-product-opportunity-uri: /v1/products/product/customer/opportunity
+            load-customer-active-products-uri: /v1/products/customer/product
+            load-customer-eligible-products-uri: /v1/products/customer/eligible-products/load
+            load-all-customer-eligible-products-uri: /v1/products/customer/eligible-products
+            load-all-customer-eligible-products-uri-v1.1: /v1/products/customer/eligible/products/all
+            get-transaction-history-uri: /v1/products/customer/product/history
+            calculate-service-fees-uri: /v1/products/product/fees/calculate
+            load-customer-eligible-products-filtered-uri: /v1/products/customer/filter/eligible-products
+            load-customer-eligible-products-uri-v1.1: /v1/products/customer/eligible-products/retreive
+            load-all-products-uri: /v1/products/product/load
+            load-products-ids-uri: /v1/products/product/load-product-ids
+            load-customer-active-products-uri-v1.1: /v1/products/customer/product/active
+            calculate-service-fees-uri-v1.1: /v1/products/product/fees/compute
+
+          config:
+            page-start: 1
+            page-size: 10
+            currencies-definitions:
+              cards:
+                - EGP
+
+        otp-management:
+          application-version: '@project.version@'
+          host: http://otp-management.dev.apps.openshift.dev.mdi
+          base-uri: /domain
+          api:
+            receive-sms-otp-uri: /v1/otp/sms/receive
+            receive-email-otp-uri: /v1/otp/email/receive
+            deactivate-token-uri: /v1/tokens/customer/token-app/deactivate
+            check-token-status: /v1/tokens/customer/token-app/status
+            unlock-user-uri: /v1/tokens/customer/token-app/unlock
+            refresh-token-app-uri: /v1/tokens/customer/token-app/credentials/refresh
+            freeze-token-app-uri: /v1/tokens/customer/token-app/freez
+            un-freeze-token-app-uri: /v1/tokens/customer/token-app/unfreez
+            active-token-app-uri: /v1/tokens/customer/token-app/activate
+            validate-app-token-otp-uri: /v1/tokens/customer/token-app/validate
+            reactivate-token-app-uri: /v1/tokens/customer/token-app/credentials/reactivate
+            receive-otp-uri: /v1/otp/receive
+            unlock-user-no-sms-otp-uri: /v1/tokens/customer/token-app/direct/unlock
+          config:
+            verify-email:
+              email-delivery-type: 2
+            cronto:
+              image-square-size: 16
+              cronto-out-file: /tmp/cronto_{file-name}.png
+
+        notification-management:
+          application-version: '@project.version@'
+          host: http://notification-management.dev.apps.openshift.dev.mdi
+          base-uri: /domain
+          api:
+            update-push-notification-status-uri: /v1/notifications/device-id/notification/status/change
+            opt-push-topic-uri: /v1/notifications/customer/topic/opt
+            list-customer-push-notifications-uri: /v1/notifications
+            search-customer-push-notifications-uri: /v1/notifications/search
+            read-all-notifications-by-customer-uri: /v1/notifications/readall
+            unread-customer-push-notifications-count-uri: /v1/notifications/unreadcount
+            send-instant-sms-uri: /v1/notifications/instant/sms
+            send-instant-push-notification-uri: /v1/notifications/push
+            register-device-uri: /v1/notifications/device-id/register
+            unregister-device-uri: /v1/notifications/device-id/unregister
+            password-expiry-notify-uri: /v1/notifications/customer/password-expiry/notify
+            password-expiry-find-by-customer-id-uri: /v1/notifications/customer/password-expiry/find-customer
+            password-expiry-reset-by-customer-id-uri: /v1/notifications/customer/password-expiry/counter-reset
+            password-expiry-register-uri: /v1/notifications/customer/password-expiry
+          config:
+            password-expiry-duration: 90
+            expiry-config-list: 15,5
+
+        statement-management:
+          application-version: '@project.version@'
+          base-uri: /domain
+          api:
+            generate-stamped-statement-uri: /v1/statements/account/statement/generate
+            request-stamped-statement-uri: /v1/statements/account/statement/request
+          config:
+            sla-days: 5
+            default-time-range-from: 14
+            default-time-range-to: 15
+
+        device-management:
+          application-version: '@project.version@'
+          host: http://device-management.dev.apps.openshift.dev.mdi
+          base-uri: /domain
+          api:
+            get-latest-trusted-device-by-customer-id-uri: /v1/devices/customer/{customerId}
+            get-trusted-device-with-path-variable-uri: /v1/devices/device/{deviceId}
+            get-trusted-device-instance-with-path-variable-uri: /v1/devices/device/{deviceId}/instance
+            get-trusted-device-instance-with-client-public-key-header-param-uri: /v1/devices/device/instance
+            get-latest-trusted-device-with-path-variable-uri: /v1/devices/device/{deviceId}/latest
+            get-latest-trusted-device-without-path-variable-uri: /v1/devices/device/latest
+            get-trusted-device-using-customer-id-with-path-variable-uri: /v1/devices/device/{deviceId}/customer/{customerId}
+            create-trusted-device-with-path-variable-uri: /v1/devices/device/{deviceId}
+            trusted-device-without-path-variable-uri: /v1/devices/device
+            update-trusted-device-instance-with-path-variable-uri: /v1/devices/device/{deviceId}/instance
+            trusted-device-instance-without-path-variable-uri: /v1/devices/device/instance
+            update-trusted-device-using-customer-id-with-path-variable-uri: /v1/devices/device/{deviceId}/customer/{customerId}
+            delete-trusted-device-using-customer-id-with-path-variable-uri: /v1/devices/device/{deviceId}/customer/{customerId}
+            trusted-device-using-customer-id-without-path-variable-uri: /v1/devices/device/{deviceId}/customer
+            get-device-notification-settings-uri: /v1/devices/device/notification
+            create-device-notification-settings-uri: /v1/devices/device/notification
+            update-device-notification-settings-uri: /v1/devices/device/notification
+            delete-device-notification-settings-uri: /v1/devices/device/notification
+            validate-login-process-with-path-variable-uri: /v1/devices/device/{deviceId}/login/validate
+            validate-login-process-without-path-variable-uri: /v1/devices/device/login/validate
+            trust-by-qr: /v1/devices/device/qr-code/trust
+            delink-device-uri: /v1/devices/device/delink
+            trust-device-by-notification: /v1/devices/device/notification/trust
+            update-device-state: /v1/devices/device/state
+            generate-pin: /v1/devices/device/pin/generate
+            allow-by-notification-uri: /v1/devices/device/notification/allow-trust
+            deny-trusting-notification: /v1/devices/device/not-me
+            allow-trust-by-card-number-uri: /v1/devices/device/card-number/allow-trust
+            authenticate-using-card-number: /v1/devices/device/card-number/trust
+            trust-by-pin: /v1/devices/device/pin/trust
+            validate-by-pin: /v1/devices/device/pin/validate
+            generate-qr-code: /v1/devices/device/qrcode/generate
+            trust-by-account-number: /v1/devices/device/account-number/trust
+            allow-by-account-number: /v1/devices/device/account-number/allow-trust
+            get-trusted-devices-using-device-state-with-path-variable-uri: /v1/devices/device/state/{deviceState}
+            get-trusted-devices-using-device-state-without-path-variable-uri: /v1/devices/device/state/
+            trust-device-using-selfie: /v1/devices/device/selfie/trust
+            validate-device-using-selfie: /v1/devices/device/selfie/validate
+            downgrade-primary-trusted-device: /v1/devices/device/downgrade
+          config:
+            trust-notification-expiry-time-milli-seconds: 30000
+            trust-notification-trial-count: 5
+            mongodb:
+              url: mongodb://Manguser:Manguser%3DPA%23%23@vsrdevmongo01.dev.mdi:27017/?authSource=
+              db-name: device-management-dev-db
+            cronto:
+              image-square-size: 900
+              cronto-out-file: /tmp/cronto_{file-name}.png
+
+        device-management-temp:
+          application-version: '@project.version@'
+          host: http://device-management-temp.dev.apps.openshift.dev.mdi
+          base-uri: /domain
+          api:
+            get-trusted-device-with-path-variable-uri: /v1/devices/device/{deviceId}
+            get-trusted-device-instance-with-path-variable-uri: /v1/devices/device/{deviceId}/instance
+            get-latest-trusted-device-with-path-variable-uri: /v1/devices/device/{deviceId}/latest
+            get-latest-trusted-device-without-path-variable-uri: /v1/devices/device/latest
+            create-trusted-device-with-path-variable-uri: /v1/devices/device/{deviceId}
+            trusted-device-without-path-variable-uri: /v1/devices/device
+            update-trusted-device-instance-with-path-variable-uri: /v1/devices/device/{deviceId}/instance
+            trusted-device-instance-without-path-variable-uri: /v1/devices/device/instance
+            update-trusted-device-using-customer-id-with-path-variable-uri: /v1/devices/device/{deviceId}/customer/{customerId}
+            delete-trusted-device-using-customer-id-with-path-variable-uri: /v1/devices/device/{deviceId}/customer/{customerId}
+            trusted-device-using-customer-id-without-path-variable-uri: /v1/devices/device/{deviceId}/customer
+            get-device-notification-settings-with-path-variable-uri: /v1/devices/device/{deviceId}/notification
+            update-device-notification-settings-with-path-variable-uri: /v1/devices/device/{deviceId}/notification
+            create-device-notification-settings-with-path-variable-uri: /v1/devices/device/{deviceId}/notification
+            delete-device-notification-settings-with-path-variable-uri: /v1/devices/device/{deviceId}/notification
+            device-notification-settings-without-path-variable-uri: /v1/devices/device/notification
+            validate-login-process-with-path-variable-uri: /v1/devices/device/{deviceId}/login/validate
+            validate-login-process-without-path-variable-uri: /v1/devices/device/login/validate
+            delink-device-uri: /v1/devices/device/delink
+            allow-by-notification-uri: /v1/devices/device/notification/allow-trust
+
+          config:
+            mongodb:
+              url: mongodb://Manguser:Manguser%3DPA%23%23@vsrdevmongo01.dev.mdi:27017/?authSource=
+              db-name: device-management-dev-db
+
+        fawry-billers-management:
+          backend:
+            bootstrap-servers: vsrsitcnfkf01.dev.mdi:9092,vsrsitcnfkf02.dev.mdi:9092,vsrsitcnfkf03.dev.mdi:9092
+          application-version: '@project.version@'
+          host: http://fawry-billers-management.dev.apps.openshift.dev.mdi
+          #          host: http://localhost:7180
+          base-uri: /domain
+          api:
+            biller-category: /v1/biller/aggregator/biller/category
+            bill-inquiry: /v1/biller/aggregator/billInquiry
+            calculate-fees: /v1/biller/aggregator/calculateFees
+            guest-bill-payment: /v1/biller/aggregator/billPayment
+            transaction-history: /v1/biller/aggregator/transaction/history
+            transaction: /v1/biller/aggregator/transaction
+            onboarded-bill-payment: /v1/biller/aggregator/onboardedBillPayment
+            fawry-biller-payment-url: /v1/biller/aggregator/
+            get-receipt-pdf-uri: /v1/biller/aggregator/generate/receipt/pdf
+            customer-payment-history-details: /v1/biller/aggregator/crmCustomerPaymentDetails
+            customer-payment-history-details-basic-auth: /v1/system/secure/biller/aggregator/crmCustomerPaymentDetails
+            payment: /v1/payment
+          payment-gateway:
+            config:
+              merchantId: TestMDI
+              authentication:
+              acceptVersions: 3DS1,3DS2
+              channel: PAYER_BROWSER
+              purpose: PAYMENT_TRANSACTION
+              redirectResponseUrl: https://apigee02.sit.apps.apigee.dev.mdi:9066/api/v1/fawry-management/Payment
+              mobileRedirectResponseUrl: https://oneBank/paymentResult
+
+
+              #              redirectResponseUrl: http://localhost:7180/domain/v1/payment
+              currency: EGP
+          config:
+            job: 0 0/59 * * * ?
+            debit-account-id: 666666
+            debit-account-type: SDA
+            secure-account-key: gdyb21LQTcIANtvYMT7QVQ==
+            account-currency: EGP
+            pormotion.btc: 513,520,54,123
+            pormotion.btc.123: 5
+            topic:
+              output:
+                cbs-acc:
+                  name: pfm_fawry_dev_events
+                linger-ms: 2000
+                batch-size: 100
+                cbs:
+                  name: MDI-MENIGA-ACCOUNTS-TEST
+                crm:
+                  name: MDI-MENIGA-USERS-TEST
+              log:
+                name: splunk_logger_connect_kafka
+                #level: possible values : NONE | INFO | DEBUG
+                level: NONE
+                batch-size: 100
+                linger-ms: 2000
+        identity-management:
+          application-version: '@project.version@'
+          host: http://identity-management.dev.apps.openshift.dev.mdi
+          base-uri: /domain
+          api:
+            retrieve-mother-names: /v1/mother-names-list/retrieve
+            validate-retrieve-data: /v1/customer/validate-retrieve
+            exist-with-the-same-national-id: /v1/customer/exist/national-id/{nationalId}
+            get-token-uri: /v1/ecards/token
+            start-sdk-session-uri: /api/v1/sdk-session/start/
+            start-bundle-sdk-session-uri: /api/v1/bundle/start-session/
+            perform-ocr-sdk-uri: /api/v1.4/ocr/
+            combine-ocr-sdk-uri: /api/v1/transaction/combine-ocr/
+            liveness-detection-sdk-uri: /api/v1/liveness/register/
+            face-match-sdk-uri: /api/v1/face/match/
+            start-watermark-sdk-uri: /api/v1.2/watermark/start/
+            predict-watermark-sdk-uri: /api/v1.2/watermark/predict/
+            transliterate-uri: /api/v1/transliterate/
+
+        pfm-management:
+          application-version: '@project.version@'
+          host: http://pfm-management.dev.apps.openshift.dev.mdi
+          base-uri: /domain
+          api:
+            get-transaction: /v1/transactions
+            get-category: /v1/categories
+
+        sprinklr-management:
+          application-version: '@project.version@'
+          host: http://sprinklr-management.dev.apps.openshift.dev.mdi
+          base-uri: /domain
+          api:
+            check-customer-existence-using-path-variable-mobile-number: /v1/sprinklr/check-customer-existence/{mobileNumber}
+            create-case-webhook: /v1/sprinklr/createcase
+          backend:
+            host: https://api2.sprinklr.com/prod2
+            api:
+              client-credentials-authentication: /oauth/token
+              fetch-profile-by-profile-id: /api/v2/profile/{profileId}
+
+        scheduler:
+          application-version: '@project.version@'
+          daily-job-corn-expression: 0 0 12 1/1 * ?
+
+      apigee:
+        https: true
+        addHostHeader: false
+        host: https://apigee02.sit.apps.apigee.dev.mdi:9066
+
+      common:
+        kafka:
+          bootstrap-servers: vsrsitcnfkf01.dev.mdi:9092,vsrsitcnfkf02.dev.mdi:9092,vsrsitcnfkf03.dev.mdi:9092
+        error-code-path: file:///home/java/config/error-codes.json
+        mock-host: http://localhost:8080
+        health-base-url: /mgmt/health
+        generated-jwt-from-basic-expiry: 1200000
+        expiry-jwt-for-guest-token: 5259492000
+        proxy-host: vsldmzfpweb-vip.onebank.local
+        proxy-port: 2020
+        kafka-log:
+          topic: integration_dev_api_tracing
+          bootstrap-servers: vsrsitcnfkf01.dev.mdi:9092,vsrsitcnfkf02.dev.mdi:9092,vsrsitcnfkf03.dev.mdi:9092
+
+        config:
+          max-in-memory-size: 16
+        masking-keys:
+          - type: GENERIC #GENERIC,URI,MICROSERVICE
+            identifier: #if GENERIC keep it empty, if URI put uri alias, if MICROSERVICE put the host of microservice
+            level: #if URI put base (base uri e.g = mgw , domain), if it backend uri without base keep it empty
+            keys: # keys to be masked (UPPERCASE)
+              #              - AUTHORIZATION
+              - NEWPASSWORD
+              - CURRENTPASSWORD
+              - OLDPASSWORD
+              - OTP
+
+          - type: URI
+            identifier: *user-name-validation
+            level: mgw
+            keys:
+              - PARAMETERS
+
+          - type: URI
+            identifier: *customers-registration-uri
+            level: mgw
+            keys:
+              - USERNAME
+              - PASSWORD
+
+          - type: URI
+            identifier: *password-validation
+            level: mgw
+            keys:
+              #              - PARAMETERS
+              - PARAMET
+
+          - type: URI
+            identifier: *perform-ocr-sdk-uri
+            level: domain
+            keys:
+              - DATA
+
+
+tracing:
+  body-type-execlusion: text/plain,text/html,text/css,text/javascript,application/javascript,image/png,application/vnd.oai.openapi
+  url-execlusion: file,terms-and-conditions,documents
+  tracing-root-uri: /mgw
+  request-url-exclusion: upload
+  response-url-exclusion: download
+
+log4j:
+  appender:
+    Stdout:
+      threshold: debug
+validations:
+  mobile-number: ^\\s*$|201[0125][0-9]{8}$ #^201[0125][0-9]{8}$
+  mobile-number-validation-regex: ^201[0125][0-9]{8}$
+  mobile-number-message: "msisdn is mandatory with the format: 201XXXXXXXXX"
+  payment-id-regex: "^[0-9]*$"
+  category-id-regex: "^[0-9]*$"
+  merchant-id-regex: "^[0-9]*$"
+  future-payment-id-regex: "^[0-9]*$"
+  account-id-regex: "^[0-9]*$" #"\\b\\d+\\b"
+  account-name-regex: "^[a-zA-Z0-9]+$" #"[a-zA-Z]" #abc\\.?
+  transaction-id-regex: "^[A-Za-z0-9_-]*$"
+  transaction-rule-id-regex: "^[A-Za-z0-9_-]*$"
+  account-number-regex: ^[0-9]{1}[0-9]{11}$
+  iban-regex: ^[a-zA-Z]{2}[0-9]{27}$
+  card-number-regex: ^(?:(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|(3(?:0[0-5]|[68][0-9])?[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11}))$
+  account-alias-regex: ^140[0-9]{3,8}$
+  bank-code-regex: ^[0-9]{4}
+  egypt-mobile-regex: ^(\+2|002)?01[1205][0-9]{8}$
+  masked-mobile-number-regex: "\\d(?=\\d{3})"
+  uuid-regex: \b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b
+  email-format-regex: "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
+  masked-card-number-regex: "(?<=\\d{4})\\d(?=\\d{4})"
+  external-account-number-regex: ^[0-9]*$
+  simple-email-format-regex: "^(.+)@(\\S+)$"
+  username-login-regex: "[A-Za-z0-9\\-_@.&]{6,30}"
+  username-login-characters-regex: .*.{6,}
+  password-max-digits: ^(?=.{8,64}$).*
+  password-minimum-characters: ^(?=.{8,}$).*
+  password-special-characters: .*[!.&^%$#@()/\-_<>?\\:;=+*~{}\[\]|`"']+.*
+  password-login-capital-letter: .*[A-Z]+.*
+  password-alphanumeric: .*(?=.*[a-zA-Z])(?=.*[0-9])[A-Za-z0-9]+.*
+  password-space-not-allowed: ^[\S]+$
+  password-case-sensitive: (.*[a-z].*[A-Z].*)|((.*[A-Z].*[a-z].*))
+  password-require-capital-letters: ^(?=.{8,64}$).*
+  password-requires-alphanumeric-and-special-characters: ^(?=.{8,64}$).*
+  password-max-indetical-successor-char-3: ^(?!.*(.)\1{3})(?=.*?[A-Za-z0-9-_@.&<>?/\\:;=+)(*%^$#!~{}\]\[|`"']).{0,}$
+  password-login-special-letter: ^(?=.{8,64}$).*
+  password-login-minimum-characters-6: ^(?=.{8,}$).*
+  password-validation-regex: ^(?=.*[0-9])(?=.*[!.&^%$#@()/\-_<>?\\:;=+*~{}\[\]|`\"'])(?=.*[A-Z])[\S]{8,64}$
+  phone-sign-up: ^(1)[0125][0-9]{8}|(01)[0125][0-9]{8}$
+  national-id: ^[0-9]{1}[0-9]{13}$
+  vcn-card-format-regex: ^(3000|3001|3002)$
+  account-number-merchant-regex: ^((EGP)[0-9]{9})$
+soft-tokens:
+  ios:
+    store: https://apps.apple.com/eg/app/cib-otp-token/id1074048518
+    package: mdi://
+  android:
+    store: https://play.google.com/store/apps/details?id=com.CIBEgyptSecureToken
+    package: mdi://ro
+  huawei:
+    store: https://appstore.huawei.com/app/C101295703
+    package: C101295703
+
+
+
+file:
+  file-max-size: 5MB
+  file-max-in-memory-size: 16
+  file-upload:
+    supported-extensions:
+      - jpg
+      - pdf
+
+job:
+  schedule:
+    cron: 0 0 * * * *
+
+
+notifications: ######
+  templates:
+    - template-name: mobile-number-disconnected-from-account
+      type: push
+      template-id: 10001
+      customizable: true
+      variables:
+        - mobileNumber
+        - apiLanguage
+    - template-name: Email_Verif_OTP
+      type: email
+      template-id: 2077
+      variables:
+        - apiLanguage
+        - emailOTP
+    - template-name: Disconnect_Additional_Mobile_Num
+      type: push
+      template-id: 2081
+      customizable: true
+      variables:
+        - mobileNumber
+        - apiLanguage
+    - template-name: change-password
+      type: push
+      template-id: 2083
+      customizable: true
+      variables:
+        - mobileNumber
+        - apiLanguage
+
+    - template-name: Registration_SMS_OTP
+      type: sms
+      template-id: 2080
+      variables:
+        - apiLanguage
+        - OTP
+    - template-name: Locked_App_Token
+      type: sms
+      template-id: 2084
+      variables:
+        - mobileNumber
+        - apiLanguage
+    - template-name: Password Expiration
+      type: push
+      template-id: 3051
+      variables:
+        - Count1
+        - apiLanguage
+    - template-name: TRUST_BY_NOTIFICATION
+      type: push
+      template-id: 81
+      customizable: true
+      variables:
+        - deviceId
+        - trustIdentifier
+        - deviceLocation
+        - deviceModel
+    - template-name: TRANSFER_TRANSACTION
+      type: push
+      template-id: 84
+      customizable: true
+      variables:
+        - transactionType
+        - transactionCurrency
+        - transactionAmount
+        - transactionDateTime
+encryption:
+  aesAlgorithm: AES
+
+messages:
+  blackListed: CUSTOMER IS BLACKLISTED.
+  notBlackListed: CUSTOMER IS NOT BLACKLISTED.
+
+
+cache-custom-config:
+  stand-alone-host: localhost
+  stand-alone-port: 6379
+  mode: cluster # none: disable cache , cluster: enable cache in cluster mode, standAlone: enable cache in standAlone mode
+  ttlDefault: 60
+  cacheExpirations:
+    CRM_AuthenticationDetails: 14220
+    CMSLookupNumericDescription: 7200 # two hours
+    SiteCore_Cookies: 870
+  cluster:
+    nodes:
+      - mdi-redis-cluster-headless.caching-system-cluster:6379
+    maxRedirects: 3
+    password: RGQ1RlpWSFlIUA==
+    timeout: 30000
+
